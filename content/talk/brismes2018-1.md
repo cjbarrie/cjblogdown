@@ -1,7 +1,7 @@
 +++
 date = 2017-01-01T00:00:00 # Schedule page publish date.
 
-title = "British Society for Middle Eastern Studies"
+title = "British Society for Middle Eastern Studies Spotlight Panel"
 time_start = 2018-06-26T17:00:00
 time_end = 2018-06-26T11:19:00
 abstract = ""

@@ -1,6 +1,6 @@
 +++
 title = "Days of Protest, Fridays of Revolution: Focal Points and Mass Mobilization in Egypt and Tunisia"
-date = "2018-12-01T00:00:00"
+date = "2018-05-01T00:00:00"
 
 # Authors. Comma separated list, e.g. `["Bob Smith", "David Jones"]`.
 authors = ["Neil Ketchley", "Christopher Barrie"]

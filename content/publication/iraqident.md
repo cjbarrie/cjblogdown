@@ -1,6 +1,6 @@
 +++
 title = "Sect, Nation, and Identity after the Fall of Mosul: Evidence from a Quasi-Natural Experiment"
-date = "2018-12-01T00:00:00"
+date = "2018-05-01T00:00:00"
 
 # Authors. Comma separated list, e.g. `["Bob Smith", "David Jones"]`.
 authors = ["Christopher Barrie"]

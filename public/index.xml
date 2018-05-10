@@ -11,33 +11,6 @@
     <atom:link href="/" rel="self" type="application/rss+xml" />
     
     <item>
-      <title>Days of Protest, Fridays of Revolution: Focal Points and Mass Mobilization in Egypt and Tunisia</title>
-      <link>/publication/friprot/</link>
-      <pubDate>Sat, 01 Dec 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/publication/friprot/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Sect, Nation, and Identity after the Fall of Mosul: Evidence from a Quasi-Natural Experiment</title>
-      <link>/publication/iraqident/</link>
-      <pubDate>Sat, 01 Dec 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/publication/iraqident/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Opportunity without Organization: Labour Mobilization in Egypt after the 25th January Revolution</title>
-      <link>/publication/moby2018/</link>
-      <pubDate>Fri, 01 Jun 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/publication/moby2018/</guid>
-      <description></description>
-    </item>
-    
-    <item>
       <title>Mapping the Tunisian Revolution</title>
       <link>/post/bpost05062018/</link>
       <pubDate>Wed, 09 May 2018 00:00:00 +0000</pubDate>
@@ -173,6 +146,33 @@ qtm(tun_area)&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Thanks for reading!&lt;/p&gt;
 &lt;/div&gt;
 </description>
+    </item>
+    
+    <item>
+      <title>Days of Protest, Fridays of Revolution: Focal Points and Mass Mobilization in Egypt and Tunisia</title>
+      <link>/publication/friprot/</link>
+      <pubDate>Tue, 01 May 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/publication/friprot/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Sect, Nation, and Identity after the Fall of Mosul: Evidence from a Quasi-Natural Experiment</title>
+      <link>/publication/iraqident/</link>
+      <pubDate>Tue, 01 May 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/publication/iraqident/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Opportunity without Organization: Labour Mobilization in Egypt after the 25th January Revolution</title>
+      <link>/publication/moby2018/</link>
+      <pubDate>Fri, 01 Dec 2017 00:00:00 +0000</pubDate>
+      
+      <guid>/publication/moby2018/</guid>
+      <description></description>
     </item>
     
     <item>

@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="theme" content="hugo-academic">
+  <meta name="generator" content="Hugo 0.40.2" />
+  <meta name="author" content="Christopher Barrie">
+
+  
+  
+  
+  
+    
+      
+    
+  
+  <meta name="description" content="TL;DR You can make hexmaps easily from a shapefile with the geogrid package in R. To sort out the geography for shapefiles with polygons of highly variant sizes, there is a workaround I found with the cartogram package.
+ Introduction R provides a growing number of mapping packages. In this post I document my workflow for producing a map of the diffusion of protest during the Tunisian Revolution. The following packages will be required for anyone who has similar mapping requirements and wishes to follow the same steps:">
+
+  
+  <link rel="alternate" hreflang="en-us" href="/post/sample05062018/">
+
+  
+
+
+  
+
+  
+  
+  <meta name="theme-color" content="#0095eb">
+  
+  
+  
+  
+    
+  
+  
+    
+    
+      
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+      
+    
+  
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha512-6MXa8B6uaO18Hid6blRMetEIoPqHf7Ux1tnyIQdpt9qI5OACx7C+O3IVTr98vwGnlcg0LOLa02i9Y1HpVhlfiw==" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.8.6/css/academicons.min.css" integrity="sha256-uFVgMKfistnJAfoCUQigIl+JfUaP47GrRKjf6CTPVmw=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha512-SfTiTlX6kk+qitfevl/7LibUOeJWlt9rbyDn92a1DqWOw9vWG2MFoays0sgObmWazO5BQPiFucnnEAjpAB+/Sw==" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" integrity="sha256-ygkqlh3CYSUri3LhQxzdcm0n1EQvH2Y+U5S2idbLtxs=" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.2.0/leaflet.css" integrity="sha512-M2wvCLH6DSRazYeZRIm1JnYyh22purTM+FDB5CsyxtQJYeKq83arPe5wgbNmcFXGqiSH2XR8dT/fJISVA1r/zQ==" crossorigin="anonymous">
+  
+  
+  
+  
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:400,700%7cMerriweather%7cRoboto&#43;Mono">
+  
+  <link rel="stylesheet" href="/styles.css">
+  
+
+  
+
+  
+  <link rel="alternate" href="/index.xml" type="application/rss+xml" title="Christopher Barrie">
+  <link rel="feed" href="/index.xml" type="application/rss+xml" title="Christopher Barrie">
+  
+
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="icon" type="image/png" href="/img/icon.png">
+  <link rel="apple-touch-icon" type="image/png" href="/img/icon-192.png">
+
+  <link rel="canonical" href="/post/sample05062018/">
+
+  <meta property="twitter:card" content="summary_large_image">
+  
+  <meta property="twitter:site" content="@https://twitter.com/cbarrie">
+  <meta property="twitter:creator" content="@https://twitter.com/cbarrie">
+  
+  <meta property="og:site_name" content="Christopher Barrie">
+  <meta property="og:url" content="/post/sample05062018/">
+  <meta property="og:title" content="Mapping the Tunisian Revolution | Christopher Barrie">
+  <meta property="og:description" content="TL;DR You can make hexmaps easily from a shapefile with the geogrid package in R. To sort out the geography for shapefiles with polygons of highly variant sizes, there is a workaround I found with the cartogram package.
+ Introduction R provides a growing number of mapping packages. In this post I document my workflow for producing a map of the diffusion of protest during the Tunisian Revolution. The following packages will be required for anyone who has similar mapping requirements and wishes to follow the same steps:">
+  <meta property="og:locale" content="en-us">
+  
+  <meta property="article:published_time" content="2018-05-09T00:00:00&#43;00:00">
+  
+  <meta property="article:modified_time" content="2018-05-09T00:00:00&#43;00:00">
+  
+
+  
+  
+
+  <title>Mapping the Tunisian Revolution | Christopher Barrie</title>
+
+</head>
+<body id="top" data-spy="scroll" data-target="#toc" data-offset="71" >
+
+<nav class="navbar navbar-default navbar-fixed-top" id="navbar-main">
+  <div class="container">
+
+    
+    <div class="navbar-header">
+      
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+              data-target=".navbar-collapse" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      
+      <a class="navbar-brand" href="/">Christopher Barrie</a>
+    </div>
+
+    
+    <div class="collapse navbar-collapse">
+
+      
+      
+      <ul class="nav navbar-nav navbar-right">
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/#about">
+            
+            <span>Home</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/#publications_selected">
+            
+            <span>Publications and working papers</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/#posts">
+            
+            <span>Blog posts</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/#talks">
+            
+            <span>Talks &amp; conferences</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/#contact">
+            
+            <span>Contact</span>
+            
+          </a>
+        </li>
+
+        
+        
+      
+
+      
+      </ul>
+
+    </div>
+  </div>
+</nav>
+
+
+<article class="article" itemscope itemtype="http://schema.org/Article">
+
+  
+
+
+  <div class="article-container">
+    <h1 itemprop="name">Mapping the Tunisian Revolution</h1>
+
+    
+
+<div class="article-metadata">
+
+  <span class="article-date">
+    
+    <time datetime="2018-05-09 00:00:00 &#43;0000 UTC" itemprop="datePublished dateModified">
+      May 9, 2018
+    </time>
+  </span>
+  <span itemscope itemprop="author publisher" itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Christopher Barrie">
+  </span>
+
+  
+  <span class="middot-divider"></span>
+  <span class="article-reading-time">
+    10 min read
+  </span>
+  
+
+  
+  
+
+  
+  
+  
+  <span class="middot-divider"></span>
+  <span class="article-categories">
+    <i class="fa fa-folder"></i>
+    
+    <a href="/categories/gis/">GIS</a
+    >, 
+    
+    <a href="/categories/contentious-politics/">Contentious Politics</a
+    >, 
+    
+    <a href="/categories/tunisia/">Tunisia</a
+    >
+    
+  </span>
+  
+  
+
+  
+  
+<div class="share-box" aria-hidden="true">
+  <ul class="share">
+    <li>
+      <a class="twitter"
+         href="https://twitter.com/intent/tweet?text=Mapping%20the%20Tunisian%20Revolution&amp;url=%2fpost%2fsample05062018%2f"
+         target="_blank" rel="noopener">
+        <i class="fa fa-twitter"></i>
+      </a>
+    </li>
+    <li>
+      <a class="facebook"
+         href="https://www.facebook.com/sharer.php?u=%2fpost%2fsample05062018%2f"
+         target="_blank" rel="noopener">
+        <i class="fa fa-facebook"></i>
+      </a>
+    </li>
+    <li>
+      <a class="linkedin"
+         href="https://www.linkedin.com/shareArticle?mini=true&amp;url=%2fpost%2fsample05062018%2f&amp;title=Mapping%20the%20Tunisian%20Revolution"
+         target="_blank" rel="noopener">
+        <i class="fa fa-linkedin"></i>
+      </a>
+    </li>
+    <li>
+      <a class="weibo"
+         href="http://service.weibo.com/share/share.php?url=%2fpost%2fsample05062018%2f&amp;title=Mapping%20the%20Tunisian%20Revolution"
+         target="_blank" rel="noopener">
+        <i class="fa fa-weibo"></i>
+      </a>
+    </li>
+    <li>
+      <a class="email"
+         href="mailto:?subject=Mapping%20the%20Tunisian%20Revolution&amp;body=%2fpost%2fsample05062018%2f">
+        <i class="fa fa-envelope"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+  
+
+</div>
+
+
+    <div class="article-style" itemprop="articleBody">
+      <div id="tldr" class="section level1">
+<h1>TL;DR</h1>
+<p>You can make hexmaps easily from a shapefile with the <code>geogrid</code> <a href="https://cran.r-project.org/web/packages/geogrid/index.html">package</a> in R. To sort out the geography for shapefiles with polygons of highly variant sizes, there is a workaround I found with the <code>cartogram</code> <a href="https://cran.r-project.org/web/packages/cartogram/index.html">package</a>.</p>
+</div>
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>R provides a growing number of mapping packages. In this post I document my workflow for producing a map of the diffusion of protest during the Tunisian Revolution. The following packages will be required for anyone who has similar mapping requirements and wishes to follow the same steps:</p>
+<pre class="r"><code>library(rgdal)
+library(tidyverse)
+library(tmap)
+library(tmaptools)
+library(ggplot2)
+library(cartogram)
+library(geogrid)
+library(geosphere)
+library(broom)</code></pre>
+<p>The procedure benefits mainly from the recently created <code>geogrid</code> <a href="https://cran.r-project.org/web/packages/geogrid/index.html">package</a> by Joseph Bailey and <code>cartogram</code> <a href="https://cran.r-project.org/web/packages/cartogram/index.html">package</a> by Sebastian Jeworutzki. I was motivated to try to better map the diffusion of protest after my first attempts yielded less than satisfactory results. Using a rather clunky combination of STATA and <a href="https://www.imagemagick.org/script/index.php">imagemagick®</a>, I was able to produce the following:</p>
+<blockquote class="twitter-tweet"><p lang="en" dir="ltr">On anniversary of <a href="https://twitter.com/hashtag/Tunisia?src=hash&amp;ref_src=twsrc%5Etfw">#Tunisia</a>&#39;s revolution, and amid renewed protests, here is gif of how protest spread in 2010-11, using original data I compiled. Day 1=December 17, 2010. <a href="https://t.co/iZfaSWKm8x">pic.twitter.com/iZfaSWKm8x</a></p>&mdash; Christopher Barrie (@cbarrie) <a href="https://twitter.com/cbarrie/status/952561208393166853?ref_src=twsrc%5Etfw">January 14, 2018</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+<p>But that was in January and I hadn’t yet been introduced to the potential of R for mapping tasks. The map serves a purpose but there are problems with it. Principal among them, the districts (or as they are referred to in Tunisia, delegations) in the capital city, Tunis, are so small that the polygons are hard to make out. I had the idea of trying to make a new shapefile wherein each delegation would take a uniform shape and size like the hexagonal cartograms that are often used on election night in the UK:</p>
+<div class="figure">
+<img src="/img/bbcmap.jpg" alt="Source: https://www.youtube.com/watch?v=VjJDyIAI4SI" />
+<p class="caption">Source: <a href="https://www.youtube.com/watch?v=VjJDyIAI4SI" class="uri">https://www.youtube.com/watch?v=VjJDyIAI4SI</a></p>
+</div>
+<p>While only recently introduced to election night coverage, hexmaps have a longish history; John Leighton sought to grid London in this form in his 1895 work <em>The Unification of London: the need and the remedy</em> as you can see below. But now we’re getting distracted.</p>
+<div class="figure">
+<img src="/img/appimage.jpg" alt="Source: https://www.flickr.com/photos/britishlibrary/tags/sysnum002122317" />
+<p class="caption">Source: <a href="https://www.flickr.com/photos/britishlibrary/tags/sysnum002122317" class="uri">https://www.flickr.com/photos/britishlibrary/tags/sysnum002122317</a></p>
+</div>
+<p>Thankfully, some packages in R make this possible. Below I outline my workflow for producing these, and also outline some potential fixes if the geography of the hexmaps you generate isn’t quite right.</p>
+</div>
+<div id="loading-in-shapefile-and-generating-hexmaps" class="section level1">
+<h1>Loading in shapefile and generating hexmaps</h1>
+<p>We start by loading up our shapefile. In this case, Tunisia. A good place to start when looking for shapefiles of countries of interest is <a href="https://gadm.org/" class="uri">https://gadm.org/</a>. A shapefile will have extension .shp and normally associated files with .dbf and .shx extensions but we don’t need to worry about these necessarily here (they will come with any shapefile you download). Normally, there will be some clue as to the level at which the shapefile is recording polygon information (e.g., administrative level 1 or 2—here we’re using level 2, which corresponds to delegations). To begin, we simply pass the .shp file to an object I’m naming <code>tun_shp</code>, which will appear in your workspace as an “sp” object, and specifically as a “SpatialPolygonsDataFrame”.</p>
+<pre class="r"><code>tun_shp &lt;- read_polygons(&quot;/path/to/shapefile.shp&quot;)</code></pre>
+<pre class="r"><code>class(tun_shp)
+## [1] &quot;SpatialPolygonsDataFrame&quot;
+## attr(,&quot;package&quot;)
+## [1] &quot;sp&quot;</code></pre>
+<p>Notice I read in the shapefile with the <code>read_polygons</code> command in the <code>geogrid</code> package as this retains important information in the shapefile required later on in the process. There are numerous other ways of reading in shapefiles, some of which retain different information or reformat the shapefile in certain ways. Robin Lovelace provides an excellent introduction to the various packages available <a href="https://github.com/Robinlovelace/Creating-maps-in-R">here</a>.</p>
+<p>Now that we have our shapefile, with the excellent <code>tmap</code> <a href="https://cran.r-project.org/web/packages/tmap/index.html">package</a> written by Martijn Tennekes we can then very easily plot a basic map to check that everything is in order.</p>
+<pre class="r"><code>qtm(tun_shp)
+## Warning: Currect projection of shape tun_shp unknown. Long-lat (WGS84) is
+## assumed.</code></pre>
+<p><img src="/rmarkdown-libs/figure-html4/unnamed-chunk-8-1.png" width="672" /></p>
+<p>This looks about right! However, as we know, we want to create a hexmap from the polygon information contained in the shapefile. To do this, following the <a href="https://github.com/jbaileyh/geogrid/blob/master/README.md">advice</a> of Joesph Bailey, we first set about plotting a number of potential hexmaps (setting <code>grid_type</code> to hexagonal) generated with the geogrid package so that we can select our favourite.</p>
+<pre class="r"><code>par(mfrow = c(2, 3), mar = c(0, 0, 2, 0))
+for (i in 1:6) {
+  new_cells &lt;- calculate_grid(shape = tun_shp,learning_rate = 0.03, grid_type = &quot;hexagonal&quot;, seed = i)
+  plot(new_cells, main = paste(&quot;Seed&quot;, i, sep = &quot; &quot;))
+}</code></pre>
+<p><img src="/rmarkdown-libs/figure-html4/unnamed-chunk-9-1.png" width="672" /></p>
+<p>I like number 2 as it seems to preserve the shape of Tunisia’s boundaries and retains the separate geography of one of the islands off its eastern border. I therefore select seed 2 and go about generating the new shapefile and assigning polygons from the old to the new shapefile with:</p>
+<pre class="r"><code>new_cells_hex &lt;- calculate_grid(shape = tun_shp, grid_type = &quot;hexagonal&quot;, seed = 2)
+resulthex &lt;- assign_polygons(tun_shp, new_cells_hex)</code></pre>
+<p>This code chunk may take some time (for me about 15-20 minutes but for more complex shapefiles it could take significantly longer) to load depending on the complexity of your original shapefile. One tip to speed up this process is to simplify your original shapefile with with the <code>ms_simplify</code> command in the <code>rmapshaper</code> <a href="https://cran.r-project.org/web/packages/rmapshaper/index.html">package</a>. To retain a copy of the newly generated shapefile (and thus speed up the process for future mapping needs) we can write a new shapefile with the following code in the <code>rgdal</code> <a href="https://cran.r-project.org/web/packages/rgdal/index.html">package</a>:</p>
+<pre class="r"><code>library(rgdal)
+writeOGR(obj=resulthex, dsn=&quot;hex_shapefiles&quot;, layer=&quot;tunhex&quot;, driver=&quot;ESRI Shapefile&quot;)</code></pre>
+<p>In order to be able to map this new shapefile with ggplot, we first need to convert it into an appropriate format (i.e., to a “data.frame”). Joseph Bailey provides a helpful function to speed up this process. We first write the function, passing it to an appropriate object name such as <code>clean</code> and then run the function on our newly created shapefile <code>resulthex</code>:</p>
+<pre class="r"><code>clean &lt;- function(shape){
+  shape@data$id = rownames(shape@data)
+  shape.points = tidy(shape, region=&quot;id&quot;)
+  shape.df = inner_join(shape.points, shape@data, by=&quot;id&quot;)
+}
+
+resulthex_tidy &lt;- clean(resulthex)
+class(resulthex_tidy)
+## [1] &quot;data.frame&quot;</code></pre>
+<p>Now that we have our shapefile as a data frame, we’re ready to merge with the data we want to map. Here, I’m using original protest event data from the Tunisian Revolution.</p>
+</div>
+<div id="load-in-data-for-merge-with-newly-generated-shapefile" class="section level1">
+<h1>Load in data for merge with newly generated shapefile</h1>
+<pre class="r"><code>dat &lt;- read.csv(&quot;/path/to/dataset.csv&quot;)</code></pre>
+<p>I then select the variables that I know I’ll need either to merge (such as the unique delegation identifier “deleg_na_1”) or that I want to map (such as the binary variable “priorprot” indicating whether a delegation has seen protest by a particular date). A snippet of the data frame can be seen below</p>
+<pre class="r"><code>  # Pass data to object, specifying variables to keep
+shdf &lt;- dat %&gt;%
+  select(lon, lat, date, deleg_na_1, priorprot) 
+head(shdf)
+##        lon      lat       date deleg_na_1 priorprot
+## 1 9.359936 33.12437 12/17/2010  Douz Nord         0
+## 2 9.359936 33.12437 12/18/2010  Douz Nord         0
+## 3 9.359936 33.12437 12/19/2010  Douz Nord         0
+## 4 9.359936 33.12437 12/20/2010  Douz Nord         0
+## 5 9.359936 33.12437 12/21/2010  Douz Nord         0
+## 6 9.359936 33.12437 12/22/2010  Douz Nord         0</code></pre>
+<p>I then reformat that data into R readable form as well as a numeric date, which can be useful for purposes of merging.</p>
+<pre class="r"><code>shdf$date1 &lt;- as.Date(shdf$date,format=&#39;%m/%d/%Y&#39;)
+shdf$date2 &lt;- as.numeric(shdf$date1)</code></pre>
+<p>We are now in a position to merge the protest data with the geometric data. The best way to do this, and the one that won’t throw up errors in time-series data, is <code>left_join</code>, which is part of Hadley Wickham’s <code>dplyr</code> <a href="https://cran.r-project.org/web/packages/dplyr/index.html">package</a>. We also have to have a common identifier shared between both datasets and specified in the “by =” argument. In this case it is the awkwardly named “deleg_na_1”</p>
+<pre class="r"><code>shdf &lt;- left_join(resulthex_tidy, shdf, by = &quot;deleg_na_1&quot;)
+## Warning: Column `deleg_na_1` joining character vector and factor, coercing
+## into character vector</code></pre>
+<p>And now we’re ready to map the protest data by date. Before doing so, I remove NA values to avoid a multiple showing polygons that have values NA (this will be the case for water bodies, for example). We can do this by plotting twenty-nine separate small multiples.</p>
+<pre class="r"><code>shdf &lt;- subset(shdf, !is.na(priorprot))
+ggplot(shdf, aes(long,
+                  lat.x,
+                  fill= factor(priorprot),
+                  group=group)) +
+  labs(title = &quot;&quot;,
+       y = &quot;&quot;, x = &quot;&quot;, fill = &quot;Protest&quot;) +
+  geom_polygon() +
+  geom_path(colour=&quot;black&quot;, lwd=.1) +
+  scale_fill_manual(values = c(&quot;white&quot;, &quot;red&quot;)) +
+  facet_wrap(~ date1) +
+  coord_equal() +theme_void() +
+  theme(legend.key = element_rect(&quot;black&quot;))</code></pre>
+<p><img src="/rmarkdown-libs/figure-html4/unnamed-chunk-21-1.png" width="1275" />
+And there we have it. Or so I thought. Looking at the patterns of protest diffusion in this map I noticed some discrepancies between what we see here and the map I tweeted back in January. I did a bit of investigating and noticed that, presumably in order to preserve the shape of Tunisia’s boundaries, the algorithm used to generate the hexmap had pushed a lot of the delegations of Tunisia’s capital, Tunis, down into the central and southern regions of the country. The map below illustrates this. Here, I plot the results of the last pane of the multiple above but highlight in bold the delegations in the capital, Tunis. Clearly they are not where they should be.</p>
+<p><img src="/rmarkdown-libs/figure-html4/unnamed-chunk-22-1.png" width="1275" /></p>
+</div>
+<div id="troubleshooting" class="section level1">
+<h1>Troubleshooting</h1>
+<p>How to fix this? My assumption was that in order to retain the shape of Tunisia’s boundaries, hexagons were forced outwards from their original geography concentrated in the northeast coast of the country. Theoretically, if the polygons in the original shapefile were of a more similar size, I assumed that the generation of the hexmap would more accurately reflect the original geography of the polygons. As such, I went about artificially inflating the size of the polygons in the original shapefile. We can do this with the <code>cartogram</code> <a href="https://cran.r-project.org/web/packages/cartogram/index.html">package</a> that I mentioned in the introduction to this post. We’ll also need the <code>geosphere</code> <a href="https://cran.r-project.org/web/packages/geosphere/index.html">package</a> written by Robert J. Hijmans, Ed Williams, and Chris Vennes. The procedure here is pretty simple and, if you find the geography of your hexmaps are distorted, this can be added as a sort of preamble to the procedure I outline above. First, we’ll take our original shapefile and pass it to a new object, called <code>carto_tun_shp</code>, which we’ll use to create the cartogram. Then we’ll use the <code>geosphere</code> package to calculate the area of the polygons in the shapefile.</p>
+<pre class="r"><code>carto_tun_shp &lt;- read_polygons(&quot;/path/to/shapefile.shp&quot;)
+
+library(geosphere)
+x &lt;- areaPolygon(carto_tun_shp)</code></pre>
+<p>One way of inflating these polygons and reducing the size of the others is quite simply to invert the values by calculating the new areas as 1/x. This is an admittedly clumsy process and will be a matter of trial and error to see what outcomes you get and how well they convert into hexmaps (but hopefully you won’t need to do this in the first place anyway!).</p>
+<pre class="r"><code>carto_tun_shp@data$AREA &lt;- 1/x
+tun_area &lt;- cartogram(carto_tun_shp, &quot;AREA&quot;)
+qtm(tun_area)</code></pre>
+<p><img src="/rmarkdown-libs/figure-html4/unnamed-chunk-25-1.png" width="1275" /></p>
+<p>Yes, I know, it doesn’t look great at this stage but stay with me. Even though the delegation boundaries seem weirdly distorted here, they are still more uniform in size than before, which could help us with producing our hexmap. You can also experiment with this stage, by calculating e.g. 0.5/AREA or otherwise. We now can use this new “sp” file to generate the hexmaps using the identical procedure to that which we used before. I’ll spare you the code of these steps as you’re essentially repeating the same steps as above. With some experimentation, I eventually managed to produce a hexmap of Tunisia the geography of which was precise enough to accurately depict what I wanted to map—namely, the diffusion of protest. On this map, as you can see below, the delegations of the capital, Tunis (highlighted in bold), are more appropriately positioned in the northeast of the country. Other delegations (after carrying out other checks that I won’t bore you with here) are also more appropriately positioned. What is more, the overall shape of the map is still identifiable as Tunisia, even if its shape doesn’t map as precisely onto the original shapefile as previously.</p>
+<p><img src="/rmarkdown-libs/figure-html4/unnamed-chunk-26-1.png" width="1275" /></p>
+<p>Then with the magic of the <code>gganimate</code> extension to the <code>ggplot2</code> <a href="https://cran.r-project.org/web/packages/ggplot2/index.html">package</a>, we can plot the diffusion of protest on the newly created hexmap. And, after all that, we’re sort of back to where we started. Except better… I think.</p>
+<p><img src="/img/tuncartohex.gif" /></p>
+<p>Thanks for reading!</p>
+</div>
+
+    </div>
+
+    
+
+
+<div class="article-tags">
+  
+  <a class="btn btn-primary btn-outline" href="/tags/r/">R</a>
+  
+  <a class="btn btn-primary btn-outline" href="/tags/gis/">GIS</a>
+  
+  <a class="btn btn-primary btn-outline" href="/tags/contentious-politics/">Contentious Politics</a>
+  
+  <a class="btn btn-primary btn-outline" href="/tags/tunisia/">Tunisia</a>
+  
+</div>
+
+
+
+
+    
+    
+    <div class="article-widget">
+      <div class="hr-light"></div>
+      <h3>Related</h3>
+      <ul>
+        
+        <li><a href="/post/bpost05062018/">Mapping the Tunisian Revolution</a></li>
+        
+      </ul>
+    </div>
+    
+
+    
+
+    
+
+
+  </div>
+</article>
+
+<footer class="site-footer">
+  <div class="container">
+    <p class="powered-by">
+
+      &copy; Christopher Barrie 2018 &middot; 
+
+      Powered by the
+      <a href="https://sourcethemes.com/academic/" target="_blank" rel="noopener">Academic theme</a> for
+      <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a>.
+
+      <span class="pull-right" aria-hidden="true">
+        <a href="#" id="back_to_top">
+          <span class="button_icon">
+            <i class="fa fa-chevron-up fa-2x"></i>
+          </span>
+        </a>
+      </span>
+
+    </p>
+  </div>
+</footer>
+
+
+<div id="modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close btn-large" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Cite</h4>
+      </div>
+      <div>
+        <pre><code class="modal-body tex"></code></pre>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-primary btn-outline js-copy-cite" href="#" target="_blank">
+          <i class="fa fa-copy"></i> Copy
+        </a>
+        <a class="btn btn-primary btn-outline js-download-cite" href="#" target="_blank">
+          <i class="fa fa-download"></i> Download
+        </a>
+        <div id="modal-error"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+    
+
+    
+
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" integrity="sha512-3P8rXCuGJdNZOnUx/03c1jOTnMn3rP63nBip5gOP2qmUh5YAdVAvFZ1E+QLZZbC1rtMrQb+mah3AfYW11RUrWA==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.3/imagesloaded.pkgd.min.js" integrity="sha512-umsR78NN0D23AzgoZ11K7raBD+R6hqKojyBZs1w8WvYlsI+QuKRGBx3LFCwhatzBunCjDuJpDHwxD13sLMbpRA==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha512-iztkobsvnjKfAtTNdHkGVjAYTrrtlC7mGp/54c40wowO7LhURYl3gVzzcEqGl/qKXQltJ2HwMrdLcNUdo+N/RQ==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.4/isotope.pkgd.min.js" integrity="sha512-VDBOIlDbuC4VWxGJNmuFRQ0Li0SKkDpmGyuhAG5LTDLd/dJ/S0WMVxriR2Y+CyPL5gzjpN4f/6iqWVBJlht0tQ==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" integrity="sha256-X5PoE3KU5l+JcX+w09p/wHl9AzK333C4hJ2I9S5mD4M=" crossorigin="anonymous"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.2.0/leaflet.js" integrity="sha512-lInM/apFSqyy1o6s89K4iQUKg6ppXEgsVxT35HbzUupEVRh2Eu9Wdl4tHj7dZO0s1uvplcYGmt3498TtHq+log==" crossorigin="anonymous"></script>
+    
+    
+    <script src="/js/hugo-academic.js"></script>
+    
+
+    
+    
+      
+      
+      <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+      
+
+      
+
+      
+
+      <script>hljs.initHighlightingOnLoad();</script>
+    
+
+    
+    
+
+  </body>
+</html>
+

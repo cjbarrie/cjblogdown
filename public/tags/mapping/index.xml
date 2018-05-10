@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Mapping on Christopher Barrie</title>
+    <link>/tags/mapping/</link>
+    <description>Recent content in Mapping on Christopher Barrie</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>&amp;copy; Christopher Barrie 2018</copyright>
+    <lastBuildDate>Sun, 06 May 2018 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/tags/mapping/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Mapping the Tunisian Revolution</title>
+      <link>/post/sample05062018/</link>
+      <pubDate>Sun, 06 May 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/post/sample05062018/</guid>
+      <description>Introduction R provides a growing number of mapping packages. In this post I document my workflow for producing a map of the diffusion of protest during the Tunisian Revolution. The following packages will be required for anyone who has similar mapping requirements and wishes to follow the same steps:
+library(rgdal) library(tidyverse) library(tmap) library(tmaptools) library(ggplot2) library(cartogram) library(geogrid) library(geosphere) library(broom) The procedure benefits mainly from the recently created geogrid package by Joseph Bailey and cartogram package by Sebastian Jeworutzki.</description>
+    </item>
+    
+  </channel>
+</rss>

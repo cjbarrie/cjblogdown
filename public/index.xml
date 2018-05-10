@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Christopher Barrie on Christopher Barrie</title>
+    <link>/</link>
+    <description>Recent content in Christopher Barrie on Christopher Barrie</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>&amp;copy; Christopher Barrie 2018</copyright>
+    <lastBuildDate>Sun, 15 Oct 2017 00:00:00 +0100</lastBuildDate>
+    <atom:link href="/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Days of Protest, Fridays of Revolution: Focal Points and Mass Mobilization in Egypt and Tunisia</title>
+      <link>/publication/friprot/</link>
+      <pubDate>Sat, 01 Dec 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/publication/friprot/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Sect, Nation, and Identity after the Fall of Mosul: Evidence from a Quasi-Natural Experiment</title>
+      <link>/publication/iraqident/</link>
+      <pubDate>Sat, 01 Dec 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/publication/iraqident/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Opportunity without Organization: Labour Mobilization in Egypt after the 25th January Revolution</title>
+      <link>/publication/moby2018/</link>
+      <pubDate>Fri, 01 Jun 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/publication/moby2018/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Mapping the Tunisian Revolution</title>
+      <link>/post/bpost05062018/</link>
+      <pubDate>Wed, 09 May 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/post/bpost05062018/</guid>
+      <description>&lt;div id=&#34;tldr&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;TL;DR&lt;/h1&gt;
+&lt;p&gt;You can make hexmaps easily from a shapefile with the &lt;code&gt;geogrid&lt;/code&gt; &lt;a href=&#34;https://cran.r-project.org/web/packages/geogrid/index.html&#34;&gt;package&lt;/a&gt; in R. To sort out the geography for shapefiles with polygons of highly variant sizes, there is a workaround I found with the &lt;code&gt;cartogram&lt;/code&gt; &lt;a href=&#34;https://cran.r-project.org/web/packages/cartogram/index.html&#34;&gt;package&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;introduction&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Introduction&lt;/h1&gt;
+&lt;p&gt;R provides a growing number of mapping packages. In this post I document my workflow for producing a map of the diffusion of protest during the Tunisian Revolution. The following packages will be required for anyone who has similar mapping requirements and wishes to follow the same steps:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(rgdal)
+library(tidyverse)
+library(tmap)
+library(tmaptools)
+library(ggplot2)
+library(cartogram)
+library(geogrid)
+library(geosphere)
+library(broom)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The procedure benefits mainly from the recently created &lt;code&gt;geogrid&lt;/code&gt; &lt;a href=&#34;https://cran.r-project.org/web/packages/geogrid/index.html&#34;&gt;package&lt;/a&gt; by Joseph Bailey and &lt;code&gt;cartogram&lt;/code&gt; &lt;a href=&#34;https://cran.r-project.org/web/packages/cartogram/index.html&#34;&gt;package&lt;/a&gt; by Sebastian Jeworutzki. I was motivated to try to better map the diffusion of protest after my first attempts yielded less than satisfactory results. Using a rather clunky combination of STATA and &lt;a href=&#34;https://www.imagemagick.org/script/index.php&#34;&gt;imagemagick®&lt;/a&gt;, I was able to produce the following:&lt;/p&gt;
+&lt;blockquote class=&#34;twitter-tweet&#34;&gt;&lt;p lang=&#34;en&#34; dir=&#34;ltr&#34;&gt;On anniversary of &lt;a href=&#34;https://twitter.com/hashtag/Tunisia?src=hash&amp;amp;ref_src=twsrc%5Etfw&#34;&gt;#Tunisia&lt;/a&gt;&amp;#39;s revolution, and amid renewed protests, here is gif of how protest spread in 2010-11, using original data I compiled. Day 1=December 17, 2010. &lt;a href=&#34;https://t.co/iZfaSWKm8x&#34;&gt;pic.twitter.com/iZfaSWKm8x&lt;/a&gt;&lt;/p&gt;&amp;mdash; Christopher Barrie (@cbarrie) &lt;a href=&#34;https://twitter.com/cbarrie/status/952561208393166853?ref_src=twsrc%5Etfw&#34;&gt;January 14, 2018&lt;/a&gt;&lt;/blockquote&gt;
+&lt;script async src=&#34;https://platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;
+
+&lt;p&gt;But that was in January and I hadn’t yet been introduced to the potential of R for mapping tasks. The map serves a purpose but there are problems with it. Principal among them, the districts (or as they are referred to in Tunisia, delegations) in the capital city, Tunis, are so small that the polygons are hard to make out. I had the idea of trying to make a new shapefile wherein each delegation would take a uniform shape and size like the hexagonal cartograms that are often used on election night in the UK:&lt;/p&gt;
+&lt;div class=&#34;figure&#34;&gt;
+&lt;img src=&#34;/img/bbcmap.jpg&#34; alt=&#34;Source: https://www.youtube.com/watch?v=VjJDyIAI4SI&#34; /&gt;
+&lt;p class=&#34;caption&#34;&gt;Source: &lt;a href=&#34;https://www.youtube.com/watch?v=VjJDyIAI4SI&#34; class=&#34;uri&#34;&gt;https://www.youtube.com/watch?v=VjJDyIAI4SI&lt;/a&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;p&gt;While only recently introduced to election night coverage, hexmaps have a longish history; John Leighton sought to grid London in this form in his 1895 work &lt;em&gt;The Unification of London: the need and the remedy&lt;/em&gt; as you can see below. But now we’re getting distracted.&lt;/p&gt;
+&lt;div class=&#34;figure&#34;&gt;
+&lt;img src=&#34;/img/appimage.jpg&#34; alt=&#34;Source: https://www.flickr.com/photos/britishlibrary/tags/sysnum002122317&#34; /&gt;
+&lt;p class=&#34;caption&#34;&gt;Source: &lt;a href=&#34;https://www.flickr.com/photos/britishlibrary/tags/sysnum002122317&#34; class=&#34;uri&#34;&gt;https://www.flickr.com/photos/britishlibrary/tags/sysnum002122317&lt;/a&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;p&gt;Thankfully, some packages in R make this possible. Below I outline my workflow for producing these, and also outline some potential fixes if the geography of the hexmaps you generate isn’t quite right.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;loading-in-shapefile-and-generating-hexmaps&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Loading in shapefile and generating hexmaps&lt;/h1&gt;
+&lt;p&gt;We start by loading up our shapefile. In this case, Tunisia. A good place to start when looking for shapefiles of countries of interest is &lt;a href=&#34;https://gadm.org/&#34; class=&#34;uri&#34;&gt;https://gadm.org/&lt;/a&gt;. A shapefile will have extension .shp and normally associated files with .dbf and .shx extensions but we don’t need to worry about these necessarily here (they will come with any shapefile you download). Normally, there will be some clue as to the level at which the shapefile is recording polygon information (e.g., administrative level 1 or 2—here we’re using level 2, which corresponds to delegations). To begin, we simply pass the .shp file to an object I’m naming &lt;code&gt;tun_shp&lt;/code&gt;, which will appear in your workspace as an “sp” object, and specifically as a “SpatialPolygonsDataFrame”.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;tun_shp &amp;lt;- read_polygons(&amp;quot;/path/to/shapefile.shp&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;class(tun_shp)
+## [1] &amp;quot;SpatialPolygonsDataFrame&amp;quot;
+## attr(,&amp;quot;package&amp;quot;)
+## [1] &amp;quot;sp&amp;quot;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Notice I read in the shapefile with the &lt;code&gt;read_polygons&lt;/code&gt; command in the &lt;code&gt;geogrid&lt;/code&gt; package as this retains important information in the shapefile required later on in the process. There are numerous other ways of reading in shapefiles, some of which retain different information or reformat the shapefile in certain ways. Robin Lovelace provides an excellent introduction to the various packages available &lt;a href=&#34;https://github.com/Robinlovelace/Creating-maps-in-R&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Now that we have our shapefile, with the excellent &lt;code&gt;tmap&lt;/code&gt; &lt;a href=&#34;https://cran.r-project.org/web/packages/tmap/index.html&#34;&gt;package&lt;/a&gt; written by Martijn Tennekes we can then very easily plot a basic map to check that everything is in order.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;qtm(tun_shp)
+## Warning: Currect projection of shape tun_shp unknown. Long-lat (WGS84) is
+## assumed.&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/rmarkdown-libs/figure-html4/unnamed-chunk-8-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;This looks about right! However, as we know, we want to create a hexmap from the polygon information contained in the shapefile. To do this, following the &lt;a href=&#34;https://github.com/jbaileyh/geogrid/blob/master/README.md&#34;&gt;advice&lt;/a&gt; of Joesph Bailey, we first set about plotting a number of potential hexmaps (setting &lt;code&gt;grid_type&lt;/code&gt; to hexagonal) generated with the geogrid package so that we can select our favourite.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;par(mfrow = c(2, 3), mar = c(0, 0, 2, 0))
+for (i in 1:6) {
+  new_cells &amp;lt;- calculate_grid(shape = tun_shp,learning_rate = 0.03, grid_type = &amp;quot;hexagonal&amp;quot;, seed = i)
+  plot(new_cells, main = paste(&amp;quot;Seed&amp;quot;, i, sep = &amp;quot; &amp;quot;))
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/rmarkdown-libs/figure-html4/unnamed-chunk-9-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;I like number 2 as it seems to preserve the shape of Tunisia’s boundaries and retains the separate geography of one of the islands off its eastern border. I therefore select seed 2 and go about generating the new shapefile and assigning polygons from the old to the new shapefile with:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;new_cells_hex &amp;lt;- calculate_grid(shape = tun_shp, grid_type = &amp;quot;hexagonal&amp;quot;, seed = 2)
+resulthex &amp;lt;- assign_polygons(tun_shp, new_cells_hex)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This code chunk may take some time (for me about 15-20 minutes but for more complex shapefiles it could take significantly longer) to load depending on the complexity of your original shapefile. One tip to speed up this process is to simplify your original shapefile with with the &lt;code&gt;ms_simplify&lt;/code&gt; command in the &lt;code&gt;rmapshaper&lt;/code&gt; &lt;a href=&#34;https://cran.r-project.org/web/packages/rmapshaper/index.html&#34;&gt;package&lt;/a&gt;. To retain a copy of the newly generated shapefile (and thus speed up the process for future mapping needs) we can write a new shapefile with the following code in the &lt;code&gt;rgdal&lt;/code&gt; &lt;a href=&#34;https://cran.r-project.org/web/packages/rgdal/index.html&#34;&gt;package&lt;/a&gt;:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(rgdal)
+writeOGR(obj=resulthex, dsn=&amp;quot;hex_shapefiles&amp;quot;, layer=&amp;quot;tunhex&amp;quot;, driver=&amp;quot;ESRI Shapefile&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;In order to be able to map this new shapefile with ggplot, we first need to convert it into an appropriate format (i.e., to a “data.frame”). Joseph Bailey provides a helpful function to speed up this process. We first write the function, passing it to an appropriate object name such as &lt;code&gt;clean&lt;/code&gt; and then run the function on our newly created shapefile &lt;code&gt;resulthex&lt;/code&gt;:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;clean &amp;lt;- function(shape){
+  shape@data$id = rownames(shape@data)
+  shape.points = tidy(shape, region=&amp;quot;id&amp;quot;)
+  shape.df = inner_join(shape.points, shape@data, by=&amp;quot;id&amp;quot;)
+}
+
+resulthex_tidy &amp;lt;- clean(resulthex)
+class(resulthex_tidy)
+## [1] &amp;quot;data.frame&amp;quot;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now that we have our shapefile as a data frame, we’re ready to merge with the data we want to map. Here, I’m using original protest event data from the Tunisian Revolution.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;load-in-data-for-merge-with-newly-generated-shapefile&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Load in data for merge with newly generated shapefile&lt;/h1&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;dat &amp;lt;- read.csv(&amp;quot;/path/to/dataset.csv&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;I then select the variables that I know I’ll need either to merge (such as the unique delegation identifier “deleg_na_1”) or that I want to map (such as the binary variable “priorprot” indicating whether a delegation has seen protest by a particular date). A snippet of the data frame can be seen below&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;  # Pass data to object, specifying variables to keep
+shdf &amp;lt;- dat %&amp;gt;%
+  select(lon, lat, date, deleg_na_1, priorprot) 
+head(shdf)
+##        lon      lat       date deleg_na_1 priorprot
+## 1 9.359936 33.12437 12/17/2010  Douz Nord         0
+## 2 9.359936 33.12437 12/18/2010  Douz Nord         0
+## 3 9.359936 33.12437 12/19/2010  Douz Nord         0
+## 4 9.359936 33.12437 12/20/2010  Douz Nord         0
+## 5 9.359936 33.12437 12/21/2010  Douz Nord         0
+## 6 9.359936 33.12437 12/22/2010  Douz Nord         0&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;I then reformat that data into R readable form as well as a numeric date, which can be useful for purposes of merging.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;shdf$date1 &amp;lt;- as.Date(shdf$date,format=&amp;#39;%m/%d/%Y&amp;#39;)
+shdf$date2 &amp;lt;- as.numeric(shdf$date1)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We are now in a position to merge the protest data with the geometric data. The best way to do this, and the one that won’t throw up errors in time-series data, is &lt;code&gt;left_join&lt;/code&gt;, which is part of Hadley Wickham’s &lt;code&gt;dplyr&lt;/code&gt; &lt;a href=&#34;https://cran.r-project.org/web/packages/dplyr/index.html&#34;&gt;package&lt;/a&gt;. We also have to have a common identifier shared between both datasets and specified in the “by =” argument. In this case it is the awkwardly named “deleg_na_1”&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;shdf &amp;lt;- left_join(resulthex_tidy, shdf, by = &amp;quot;deleg_na_1&amp;quot;)
+## Warning: Column `deleg_na_1` joining character vector and factor, coercing
+## into character vector&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;And now we’re ready to map the protest data by date. Before doing so, I remove NA values to avoid a multiple showing polygons that have values NA (this will be the case for water bodies, for example). We can do this by plotting twenty-nine separate small multiples.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;shdf &amp;lt;- subset(shdf, !is.na(priorprot))
+ggplot(shdf, aes(long,
+                  lat.x,
+                  fill= factor(priorprot),
+                  group=group)) +
+  labs(title = &amp;quot;&amp;quot;,
+       y = &amp;quot;&amp;quot;, x = &amp;quot;&amp;quot;, fill = &amp;quot;Protest&amp;quot;) +
+  geom_polygon() +
+  geom_path(colour=&amp;quot;black&amp;quot;, lwd=.1) +
+  scale_fill_manual(values = c(&amp;quot;white&amp;quot;, &amp;quot;red&amp;quot;)) +
+  facet_wrap(~ date1) +
+  coord_equal() +theme_void() +
+  theme(legend.key = element_rect(&amp;quot;black&amp;quot;))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/rmarkdown-libs/figure-html4/unnamed-chunk-21-1.png&#34; width=&#34;1275&#34; /&gt;
+And there we have it. Or so I thought. Looking at the patterns of protest diffusion in this map I noticed some discrepancies between what we see here and the map I tweeted back in January. I did a bit of investigating and noticed that, presumably in order to preserve the shape of Tunisia’s boundaries, the algorithm used to generate the hexmap had pushed a lot of the delegations of Tunisia’s capital, Tunis, down into the central and southern regions of the country. The map below illustrates this. Here, I plot the results of the last pane of the multiple above but highlight in bold the delegations in the capital, Tunis. Clearly they are not where they should be.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/rmarkdown-libs/figure-html4/unnamed-chunk-22-1.png&#34; width=&#34;1275&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;troubleshooting&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Troubleshooting&lt;/h1&gt;
+&lt;p&gt;How to fix this? My assumption was that in order to retain the shape of Tunisia’s boundaries, hexagons were forced outwards from their original geography concentrated in the northeast coast of the country. Theoretically, if the polygons in the original shapefile were of a more similar size, I assumed that the generation of the hexmap would more accurately reflect the original geography of the polygons. As such, I went about artificially inflating the size of the polygons in the original shapefile. We can do this with the &lt;code&gt;cartogram&lt;/code&gt; &lt;a href=&#34;https://cran.r-project.org/web/packages/cartogram/index.html&#34;&gt;package&lt;/a&gt; that I mentioned in the introduction to this post. We’ll also need the &lt;code&gt;geosphere&lt;/code&gt; &lt;a href=&#34;https://cran.r-project.org/web/packages/geosphere/index.html&#34;&gt;package&lt;/a&gt; written by Robert J. Hijmans, Ed Williams, and Chris Vennes. The procedure here is pretty simple and, if you find the geography of your hexmaps are distorted, this can be added as a sort of preamble to the procedure I outline above. First, we’ll take our original shapefile and pass it to a new object, called &lt;code&gt;carto_tun_shp&lt;/code&gt;, which we’ll use to create the cartogram. Then we’ll use the &lt;code&gt;geosphere&lt;/code&gt; package to calculate the area of the polygons in the shapefile.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;carto_tun_shp &amp;lt;- read_polygons(&amp;quot;/path/to/shapefile.shp&amp;quot;)
+
+library(geosphere)
+x &amp;lt;- areaPolygon(carto_tun_shp)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;One way of inflating these polygons and reducing the size of the others is quite simply to invert the values by calculating the new areas as 1/x. This is an admittedly clumsy process and will be a matter of trial and error to see what outcomes you get and how well they convert into hexmaps (but hopefully you won’t need to do this in the first place anyway!).&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;carto_tun_shp@data$AREA &amp;lt;- 1/x
+tun_area &amp;lt;- cartogram(carto_tun_shp, &amp;quot;AREA&amp;quot;)
+qtm(tun_area)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/rmarkdown-libs/figure-html4/unnamed-chunk-25-1.png&#34; width=&#34;1275&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Yes, I know, it doesn’t look great at this stage but stay with me. Even though the delegation boundaries seem weirdly distorted here, they are still more uniform in size than before, which could help us with producing our hexmap. You can also experiment with this stage, by calculating e.g. 0.5/AREA or otherwise. We now can use this new “sp” file to generate the hexmaps using the identical procedure to that which we used before. I’ll spare you the code of these steps as you’re essentially repeating the same steps as above. With some experimentation, I eventually managed to produce a hexmap of Tunisia the geography of which was precise enough to accurately depict what I wanted to map—namely, the diffusion of protest. On this map, as you can see below, the delegations of the capital, Tunis (highlighted in bold), are more appropriately positioned in the northeast of the country. Other delegations (after carrying out other checks that I won’t bore you with here) are also more appropriately positioned. What is more, the overall shape of the map is still identifiable as Tunisia, even if its shape doesn’t map as precisely onto the original shapefile as previously.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/rmarkdown-libs/figure-html4/unnamed-chunk-26-1.png&#34; width=&#34;1275&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Then with the magic of the &lt;code&gt;gganimate&lt;/code&gt; extension to the &lt;code&gt;ggplot2&lt;/code&gt; &lt;a href=&#34;https://cran.r-project.org/web/packages/ggplot2/index.html&#34;&gt;package&lt;/a&gt;, we can plot the diffusion of protest on the newly created hexmap. And, after all that, we’re sort of back to where we started. Except better… I think.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/img/tuncartohex.gif&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Thanks for reading!&lt;/p&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>The contentious politics of nationalism and the anti‐naturalization campaign in Tunisia, 1932–1933</title>
+      <link>/publication/nn2017/</link>
+      <pubDate>Sun, 01 Oct 2017 00:00:00 +0100</pubDate>
+      
+      <guid>/publication/nn2017/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>American Political Science Association Conference</title>
+      <link>/talk/apsa2018/</link>
+      <pubDate>Sun, 01 Jan 2017 00:00:00 +0000</pubDate>
+      
+      <guid>/talk/apsa2018/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>American Sociological Association Conference</title>
+      <link>/talk/asa2018/</link>
+      <pubDate>Sun, 01 Jan 2017 00:00:00 +0000</pubDate>
+      
+      <guid>/talk/asa2018/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>British Society for Middle Eastern Studies</title>
+      <link>/talk/brismes2018-1/</link>
+      <pubDate>Sun, 01 Jan 2017 00:00:00 +0000</pubDate>
+      
+      <guid>/talk/brismes2018-1/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>British Society for Middle Eastern Studies</title>
+      <link>/talk/brismes2018/</link>
+      <pubDate>Sun, 01 Jan 2017 00:00:00 +0000</pubDate>
+      
+      <guid>/talk/brismes2018/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>King&#39;s College London Department of Middle Eastern Studies Public Seminar Series</title>
+      <link>/talk/kcl2017/</link>
+      <pubDate>Sun, 01 Jan 2017 00:00:00 +0000</pubDate>
+      
+      <guid>/talk/kcl2017/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Middle East Studies Association Conference</title>
+      <link>/talk/mesa2017/</link>
+      <pubDate>Sun, 01 Jan 2017 00:00:00 +0000</pubDate>
+      
+      <guid>/talk/mesa2017/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Mobilization Journal Conference on Social Movements and Protest</title>
+      <link>/talk/moby2017/</link>
+      <pubDate>Sun, 01 Jan 2017 00:00:00 +0000</pubDate>
+      
+      <guid>/talk/moby2017/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Social Science History Association Conference</title>
+      <link>/talk/ssha2016/</link>
+      <pubDate>Sun, 01 Jan 2017 00:00:00 +0000</pubDate>
+      
+      <guid>/talk/ssha2016/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Social Science History Association Conference</title>
+      <link>/talk/ssha2017/</link>
+      <pubDate>Sun, 01 Jan 2017 00:00:00 +0000</pubDate>
+      
+      <guid>/talk/ssha2017/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Deep Learning</title>
+      <link>/project/deep-learning/</link>
+      <pubDate>Wed, 27 Apr 2016 00:00:00 +0100</pubDate>
+      
+      <guid>/project/deep-learning/</guid>
+      <description>&lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis posuere tellus ac convallis placerat. Proin tincidunt magna sed ex sollicitudin condimentum. Sed ac faucibus dolor, scelerisque sollicitudin nisi. Cras purus urna, suscipit quis sapien eu, pulvinar tempor diam. Quisque risus orci, mollis id ante sit amet, gravida egestas nisl. Sed ac tempus magna. Proin in dui enim. Donec condimentum, sem id dapibus fringilla, tellus enim condimentum arcu, nec volutpat est felis vel metus. Vestibulum sit amet erat at nulla eleifend gravida.&lt;/p&gt;
+
+&lt;p&gt;Nullam vel molestie justo. Curabitur vitae efficitur leo. In hac habitasse platea dictumst. Sed pulvinar mauris dui, eget varius purus congue ac. Nulla euismod, lorem vel elementum dapibus, nunc justo porta mi, sed tempus est est vel tellus. Nam et enim eleifend, laoreet sem sit amet, elementum sem. Morbi ut leo congue, maximus velit ut, finibus arcu. In et libero cursus, rutrum risus non, molestie leo. Nullam congue quam et volutpat malesuada. Sed risus tortor, pulvinar et dictum nec, sodales non mi. Phasellus lacinia commodo laoreet. Nam mollis, erat in feugiat consectetur, purus eros egestas tellus, in auctor urna odio at nibh. Mauris imperdiet nisi ac magna convallis, at rhoncus ligula cursus.&lt;/p&gt;
+
+&lt;p&gt;Cras aliquam rhoncus ipsum, in hendrerit nunc mattis vitae. Duis vitae efficitur metus, ac tempus leo. Cras nec fringilla lacus. Quisque sit amet risus at ipsum pharetra commodo. Sed aliquam mauris at consequat eleifend. Praesent porta, augue sed viverra bibendum, neque ante euismod ante, in vehicula justo lorem ac eros. Suspendisse augue libero, venenatis eget tincidunt ut, malesuada at lorem. Donec vitae bibendum arcu. Aenean maximus nulla non pretium iaculis. Quisque imperdiet, nulla in pulvinar aliquet, velit quam ultrices quam, sit amet fringilla leo sem vel nunc. Mauris in lacinia lacus.&lt;/p&gt;
+
+&lt;p&gt;Suspendisse a tincidunt lacus. Curabitur at urna sagittis, dictum ante sit amet, euismod magna. Sed rutrum massa id tortor commodo, vitae elementum turpis tempus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean purus turpis, venenatis a ullamcorper nec, tincidunt et massa. Integer posuere quam rutrum arcu vehicula imperdiet. Mauris ullamcorper quam vitae purus congue, quis euismod magna eleifend. Vestibulum semper vel augue eget tincidunt. Fusce eget justo sodales, dapibus odio eu, ultrices lorem. Duis condimentum lorem id eros commodo, in facilisis mauris scelerisque. Morbi sed auctor leo. Nullam volutpat a lacus quis pharetra. Nulla congue rutrum magna a ornare.&lt;/p&gt;
+
+&lt;p&gt;Aliquam in turpis accumsan, malesuada nibh ut, hendrerit justo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Quisque sed erat nec justo posuere suscipit. Donec ut efficitur arcu, in malesuada neque. Nunc dignissim nisl massa, id vulputate nunc pretium nec. Quisque eget urna in risus suscipit ultricies. Pellentesque odio odio, tincidunt in eleifend sed, posuere a diam. Nam gravida nisl convallis semper elementum. Morbi vitae felis faucibus, vulputate orci placerat, aliquet nisi. Aliquam erat volutpat. Maecenas sagittis pulvinar purus, sed porta quam laoreet at.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,244 @@
+---
+title: "Mapping the Tunisian Revolution"
+author: "Christopher Barrie"
+date: 2018-05-09
+categories: ["GIS", "Contentious Politics", "Tunisia"]
+tags: ["R", "GIS", "Contentious Politics", "Tunisia"]
+image_preview: 'bbcmap.jpg'
+---
+
+
+```{r setup, include=FALSE}
+# The code chunk below (opts_chunk) means that code is collapsed into one 
+# greyed box and looks nicer. i.e., this sets collapse as global option for the
+# .Rmd file
+
+knitr::opts_chunk$set(collapse = TRUE)
+```
+# TL;DR
+
+You can make hexmaps easily from a shapefile with the `geogrid` [package](https://cran.r-project.org/web/packages/geogrid/index.html) in R. To sort out the geography for shapefiles with polygons of highly variant sizes, there is a workaround I found with the `cartogram` [package](https://cran.r-project.org/web/packages/cartogram/index.html).
+
+# Introduction
+
+R provides a growing number of mapping packages. In this post I document my workflow for producing a map of the diffusion of protest during the Tunisian Revolution. The following packages will be required for anyone who has similar mapping requirements and wishes to follow the same steps:
+
+```{r, message=FALSE, warning=FALSE}
+library(rgdal)
+library(tidyverse)
+library(tmap)
+library(tmaptools)
+library(ggplot2)
+library(cartogram)
+library(geogrid)
+library(geosphere)
+library(broom)
+```
+
+The procedure benefits mainly from the recently created `geogrid` [package](https://cran.r-project.org/web/packages/geogrid/index.html) by Joseph Bailey and `cartogram` [package](https://cran.r-project.org/web/packages/cartogram/index.html)  by Sebastian Jeworutzki. I was motivated to try to better map the diffusion of protest after my first attempts yielded less than satisfactory results. Using a rather clunky combination of STATA and [imagemagick&reg;](https://www.imagemagick.org/script/index.php), I was able to produce the following:
+
+`r blogdown::shortcode('tweet', '952561208393166853')`
+
+But that was in January and I hadn't yet been introduced to the potential of R for mapping tasks. The map serves a purpose but there are problems with it. Principal among them, the districts (or as they are referred to in Tunisia, delegations) in the capital city, Tunis, are so small that the polygons are hard to make out. I had the idea of trying to make a new shapefile wherein each delegation would take a uniform shape and size like the hexagonal cartograms that are often used on election night in the UK:
+
+```{r, include=FALSE}
+# Note that to get images to render in Blogdown, you call the image like below
+# even if this means that the .Rmd throws up a "No image" error. I don't know why
+# this is the case but it is.
+```
+
+![Source: https://www.youtube.com/watch?v=VjJDyIAI4SI](/img/bbcmap.jpg)
+
+While only recently introduced to election night coverage, hexmaps have a longish history; John Leighton sought to grid London in this form in his 1895 work *The Unification of London: the need and the remedy* as you can see below. But now we're getting distracted. 
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+library(magick)
+img1 <- image_read("/Users/christopherbarrie/Dropbox/Desktop/R/Blogdown/blogdown/static/img/hex_lond.jpg")
+img2 <- image_read("/Users/christopherbarrie/Dropbox/Desktop/R/Blogdown/blogdown/static/img/hex_lond1.jpg")
+```
+```{r, echo=FALSE,  warning=FALSE, message=FALSE}
+library(magick)
+appimage <- image_append(c(img1, img2))
+image_write(appimage, path = "/Users/christopherbarrie/Dropbox/Desktop/R/Blogdown/blogdown/static/img/appimage.jpg", format = "jpg")
+```
+
+![Source: https://www.flickr.com/photos/britishlibrary/tags/sysnum002122317](/img/appimage.jpg)
+
+Thankfully, some packages in R make this possible. Below I outline my workflow for producing these, and also outline some potential fixes if the geography of the hexmaps you generate isn't quite right. 
+
+# Loading in shapefile and generating hexmaps
+
+We start by loading up our shapefile. In this case, Tunisia. A good place to start when looking for shapefiles of countries of interest is <https://gadm.org/>. A shapefile will have extension .shp and normally associated files with .dbf and .shx extensions but we don't need to worry about these necessarily here (they will come with any shapefile you download). Normally, there will be some clue as to the level at which the shapefile is recording polygon information (e.g., administrative level 1 or 2---here we're using level 2, which corresponds to delegations). To begin, we simply pass the .shp file to an object I'm naming `tun_shp`, which will appear in your workspace as an "sp" object, and specifically as a "SpatialPolygonsDataFrame".
+
+```{r, include= FALSE}
+tun_shp <- read_polygons("/Users/christopherbarrie/Dropbox/Desktop/DPhil/Analysis/delegations.shp")
+```
+
+```{r, eval= FALSE}
+tun_shp <- read_polygons("/path/to/shapefile.shp")
+```
+```{r}
+class(tun_shp)
+```
+
+Notice I read in the shapefile with the `read_polygons` command in the `geogrid` package as this retains important information in the shapefile required later on in the process. There are numerous other ways of reading in shapefiles, some of which retain different information or reformat the shapefile in certain ways. Robin Lovelace provides an excellent introduction to the various packages available [here](https://github.com/Robinlovelace/Creating-maps-in-R).
+
+Now that we have our shapefile, with the excellent `tmap` [package](https://cran.r-project.org/web/packages/tmap/index.html) written by Martijn Tennekes we can then very easily plot a basic map to check that everything is in order.
+
+```{r}
+qtm(tun_shp)
+```
+
+This looks about right! However, as we know, we want to create a hexmap from the polygon information contained in the shapefile. To do this, following the [advice](https://github.com/jbaileyh/geogrid/blob/master/README.md) of Joesph Bailey, we first set about plotting a number of potential hexmaps (setting `grid_type` to hexagonal) generated with the geogrid package so that we can select our favourite.
+
+```{r}
+par(mfrow = c(2, 3), mar = c(0, 0, 2, 0))
+for (i in 1:6) {
+  new_cells <- calculate_grid(shape = tun_shp,learning_rate = 0.03, grid_type = "hexagonal", seed = i)
+  plot(new_cells, main = paste("Seed", i, sep = " "))
+}
+```
+
+I like number 2 as it seems to preserve the shape of Tunisia's boundaries and retains the separate geography of one of the islands off its eastern border. I therefore select seed 2 and go about generating the new shapefile and assigning polygons from the old to the new shapefile with:
+
+```{r, eval=FALSE}
+new_cells_hex <- calculate_grid(shape = tun_shp, grid_type = "hexagonal", seed = 2)
+resulthex <- assign_polygons(tun_shp, new_cells_hex)
+```
+
+This code chunk may take some time (for me about 15-20 minutes but for more complex shapefiles it could take significantly longer) to load depending on the complexity of your original shapefile. One tip to speed up this process is to simplify your original shapefile with with the `ms_simplify` command in the `rmapshaper` [package](https://cran.r-project.org/web/packages/rmapshaper/index.html). To retain a copy of the newly generated shapefile (and thus speed up the process for future mapping needs) we can write a new shapefile with the following code in the `rgdal` [package](https://cran.r-project.org/web/packages/rgdal/index.html):
+
+```{r, eval=FALSE}
+library(rgdal)
+writeOGR(obj=resulthex, dsn="hex_shapefiles", layer="tunhex", driver="ESRI Shapefile")
+```
+
+```{r, include=FALSE}
+resulthex <- read_polygons("/Users/christopherbarrie/Dropbox/Desktop/R/Tunisia maps/hex_shapefiles/tunhex.shp")
+```
+In order to be able to map this new shapefile with ggplot, we first need to convert it into an appropriate format (i.e., to a "data.frame"). Joseph Bailey provides a helpful function to speed up this process. We first write the function, passing it to an appropriate object name such as `clean` and then run the function on our newly created shapefile `resulthex`:
+
+```{r}
+clean <- function(shape){
+  shape@data$id = rownames(shape@data)
+  shape.points = tidy(shape, region="id")
+  shape.df = inner_join(shape.points, shape@data, by="id")
+}
+
+resulthex_tidy <- clean(resulthex)
+class(resulthex_tidy)
+```
+
+Now that we have our shapefile as a data frame, we're ready to merge with the data we want to map. Here, I'm using original protest event data from the Tunisian Revolution. 
+
+```{r, include=FALSE, message=FALSE, warning=FALSE}
+# Tidy up the data before the merge, to make sure no delegations with same name
+# such as Ezzouhour here.
+resulthex_tidy$deleg_na_1 <- as.character(resulthex_tidy$deleg_na_1)
+resulthex_tidy$gov_name_f <- as.character(resulthex_tidy$gov_name_f)
+resulthex_tidy$deleg_na_1[resulthex_tidy$deleg_na_1 =="Ezzouhour" & resulthex_tidy$gov_name_f=="Tunis"] <- "Ezzuhour"
+```
+
+# Load in data for merge with newly generated shapefile
+
+```{r, include=FALSE}
+# Read in data
+dat <- read.csv("/Users/christopherbarrie/Dropbox/Desktop/R/Tunisia maps/tundat.csv", header=T)
+```
+
+```{r, eval=FALSE}
+dat <- read.csv("/path/to/dataset.csv")
+```
+
+I then select the variables that I know I'll need either to merge (such as the unique delegation identifier "deleg_na_1") or that I want to map (such as the binary variable "priorprot" indicating whether a delegation has seen protest by a particular date). A snippet of the data frame can be seen below 
+
+```{r}
+  # Pass data to object, specifying variables to keep
+shdf <- dat %>%
+  select(lon, lat, date, deleg_na_1, priorprot) 
+head(shdf)
+```
+
+I then reformat that data into R readable form as well as a numeric date, which can be useful for purposes of merging. 
+
+```{r}
+shdf$date1 <- as.Date(shdf$date,format='%m/%d/%Y')
+shdf$date2 <- as.numeric(shdf$date1)
+```
+
+We are now in a position to merge the protest data with the geometric data. The best way to do this, and the one that won't throw up errors in time-series data, is `left_join`, which is part of Hadley Wickham's `dplyr` [package](https://cran.r-project.org/web/packages/dplyr/index.html). We also have to have a common identifier shared between both datasets and specified in the "by =" argument. In this case it is the awkwardly named "deleg_na_1"
+
+```{r}
+shdf <- left_join(resulthex_tidy, shdf, by = "deleg_na_1")
+```
+
+And now we're ready to map the protest data by date. Before doing so, I remove NA values to avoid a multiple showing polygons that have values NA (this will be the case for water bodies, for example). We can do this by plotting twenty-nine separate small multiples.
+
+```{r, eval=FALSE}
+shdf <- subset(shdf, !is.na(priorprot))
+ggplot(shdf, aes(long,
+                  lat.x,
+                  fill= factor(priorprot),
+                  group=group)) +
+  labs(title = "",
+       y = "", x = "", fill = "Protest") +
+  geom_polygon() +
+  geom_path(colour="black", lwd=.1) +
+  scale_fill_manual(values = c("white", "red")) +
+  facet_wrap(~ date1) +
+  coord_equal() +theme_void() +
+  theme(legend.key = element_rect("black"))
+```
+
+```{r, echo=FALSE,  warning=FALSE, message=FALSE}
+library(magick)
+tunmult <- image_read_pdf("/Users/christopherbarrie/Dropbox/Desktop/R/Blogdown/blogdown/static/img/tunmult.pdf")
+tunmult
+```
+And there we have it. Or so I thought. Looking at the patterns of protest diffusion in this map I noticed some discrepancies between what we see here and the map I tweeted back in January. I did a bit of investigating and noticed that, presumably in order to preserve the shape of Tunisia's boundaries, the algorithm used to generate the hexmap had pushed a lot of the delegations of Tunisia's capital, Tunis, down into the central and southern regions of the country. The map below illustrates this. Here, I plot the results of the last pane of the multiple above but highlight in bold the delegations in the capital, Tunis. Clearly they are not where they should be. 
+
+```{r, echo=FALSE,  warning=FALSE, message=FALSE}
+library(magick)
+tunmult29 <- image_read_pdf("/Users/christopherbarrie/Dropbox/Desktop/R/Blogdown/blogdown/static/img/tunmult29.pdf")
+tunmult29
+```
+
+# Troubleshooting
+
+How to fix this? My assumption was that in order to retain the shape of Tunisia's boundaries, hexagons were forced outwards from their original geography concentrated in the northeast coast of the country. Theoretically, if the polygons in the original shapefile were of a more similar size, I assumed that the generation of the hexmap would more accurately reflect the original geography of the polygons. As such, I went about artificially inflating the size of the polygons in the original shapefile. We can do this with the `cartogram` [package](https://cran.r-project.org/web/packages/cartogram/index.html) that I mentioned in the introduction to this post. We'll also need the `geosphere` [package](https://cran.r-project.org/web/packages/geosphere/index.html) written by Robert J. Hijmans, Ed Williams, and Chris Vennes. The procedure here is pretty simple and, if you find the geography of your hexmaps are distorted, this can be added as a sort of preamble to the procedure I outline above. First, we'll take our original shapefile and pass it to a new object, called `carto_tun_shp`, which we'll use to create the cartogram. Then we'll use the `geosphere` package to calculate the area of the polygons in the shapefile. 
+
+
+```{r, eval= FALSE}
+carto_tun_shp <- read_polygons("/path/to/shapefile.shp")
+
+library(geosphere)
+x <- areaPolygon(carto_tun_shp)
+```
+
+One way of inflating these polygons and reducing the size of the others is quite simply to invert the values by calculating the new areas as 1/x. This is an admittedly clumsy process and will be a matter of trial and error to see what outcomes you get and how well they convert into hexmaps (but hopefully you won't need to do this in the first place anyway!).
+
+```{r, eval=FALSE}
+carto_tun_shp@data$AREA <- 1/x
+tun_area <- cartogram(carto_tun_shp, "AREA")
+qtm(tun_area)
+```
+
+```{r, echo=FALSE,  warning=FALSE, message=FALSE}
+library(magick)
+tuncarto <- image_read_pdf("/Users/christopherbarrie/Dropbox/Desktop/R/Blogdown/blogdown/static/img/tuncarto.pdf")
+tuncarto
+```
+
+Yes, I know, it doesn't look great at this stage but stay with me. Even though the delegation boundaries seem weirdly distorted here, they are still more uniform in size than before, which could help us with producing our hexmap. You can also experiment with this stage, by calculating e.g. 0.5/AREA or otherwise. We now can use this new "sp" file to generate the hexmaps using the identical procedure to that which we used before. I'll spare you the code of these steps as you're essentially repeating the same steps as above. With some experimentation, I eventually managed to produce a hexmap of Tunisia the geography of which was precise enough to accurately depict what I wanted to map---namely, the diffusion of protest. On this map, as you can see below, the delegations of the capital, Tunis (highlighted in bold), are more appropriately positioned in the northeast of the country. Other delegations (after carrying out other checks that I won't bore you with here) are also more appropriately positioned. What is more, the overall shape of the map is still identifiable as Tunisia, even if its shape doesn't map as precisely onto the original shapefile as previously.
+
+```{r, echo=FALSE,  warning=FALSE, message=FALSE}
+library(magick)
+tuncartohex <- image_read_pdf("/Users/christopherbarrie/Dropbox/Desktop/R/Blogdown/blogdown/static/img/tuncartohex.pdf")
+tuncartohex
+```
+
+Then with the magic of the `gganimate` extension to the `ggplot2` [package](https://cran.r-project.org/web/packages/ggplot2/index.html), we can plot the diffusion of protest on the newly created hexmap. And, after all that, we're sort of back to where we started. Except better... I think.
+
+![](/img/tuncartohex.gif)
+
+Thanks for reading!

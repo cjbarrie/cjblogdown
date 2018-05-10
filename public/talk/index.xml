@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Recent &amp; Upcoming Talks on Christopher Barrie</title>
+    <link>/talk/</link>
+    <description>Recent content in Recent &amp; Upcoming Talks on Christopher Barrie</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>&amp;copy; Christopher Barrie 2018</copyright>
+    <lastBuildDate>Sun, 01 Jan 2017 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/talk/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>American Political Science Association Conference</title>
+      <link>/talk/apsa2018/</link>
+      <pubDate>Sun, 01 Jan 2017 00:00:00 +0000</pubDate>
+      
+      <guid>/talk/apsa2018/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>American Sociological Association Conference</title>
+      <link>/talk/asa2018/</link>
+      <pubDate>Sun, 01 Jan 2017 00:00:00 +0000</pubDate>
+      
+      <guid>/talk/asa2018/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>British Society for Middle Eastern Studies</title>
+      <link>/talk/brismes2018-1/</link>
+      <pubDate>Sun, 01 Jan 2017 00:00:00 +0000</pubDate>
+      
+      <guid>/talk/brismes2018-1/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>British Society for Middle Eastern Studies</title>
+      <link>/talk/brismes2018/</link>
+      <pubDate>Sun, 01 Jan 2017 00:00:00 +0000</pubDate>
+      
+      <guid>/talk/brismes2018/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>King&#39;s College London Department of Middle Eastern Studies Public Seminar Series</title>
+      <link>/talk/kcl2017/</link>
+      <pubDate>Sun, 01 Jan 2017 00:00:00 +0000</pubDate>
+      
+      <guid>/talk/kcl2017/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Middle East Studies Association Conference</title>
+      <link>/talk/mesa2017/</link>
+      <pubDate>Sun, 01 Jan 2017 00:00:00 +0000</pubDate>
+      
+      <guid>/talk/mesa2017/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Mobilization Journal Conference on Social Movements and Protest</title>
+      <link>/talk/moby2017/</link>
+      <pubDate>Sun, 01 Jan 2017 00:00:00 +0000</pubDate>
+      
+      <guid>/talk/moby2017/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Social Science History Association Conference</title>
+      <link>/talk/ssha2016/</link>
+      <pubDate>Sun, 01 Jan 2017 00:00:00 +0000</pubDate>
+      
+      <guid>/talk/ssha2016/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Social Science History Association Conference</title>
+      <link>/talk/ssha2017/</link>
+      <pubDate>Sun, 01 Jan 2017 00:00:00 +0000</pubDate>
+      
+      <guid>/talk/ssha2017/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,200 @@
+---
+title: "Youth and competition boost turnout in Tunisian Municipal Elections"
+author: "Christopher Barrie"
+date: 2018-05-18
+categories: ["OpenData", "Elections", "Tunisia"]
+tags: ["OpenData", "Elections", "Tunisia"]
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(collapse = TRUE)
+```
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+library(openxlsx)
+library(tidyverse)
+library(leaflet)
+library(rgdal)
+library(ggpubr)
+library(corrplot)
+library(plotly)
+library(gridExtra)
+
+sheets <- openxlsx::getSheetNames("/Users/christopherbarrie/Dropbox/Desktop/R/Tunisia maps/Municipales/raw/tun_muni1.xlsx")
+
+df <- data.frame()
+
+for (x in 1:27) {
+  df <- rbind(df, read.xlsx("/Users/christopherbarrie/Dropbox/Desktop/R/Tunisia maps/Municipales/raw/tun_muni1.xlsx", sheet=sheets[x]))
+}
+
+names(df) <- c("name.fr","name_ar", 
+               "type_list", "name_list", 
+               "name_list_ar", "votes", 
+               "votes_prop", "seats", 
+               "time_stamp", "source", 
+               "delegation")
+
+# get election data
+
+df_EL_short <- df %>% 
+  select(votes, votes_prop, seats, type_list, name_list, name.fr, delegation)
+
+# generate vote percentage
+df_EL_short$votes_percent <- df_EL_short$votes_prop*100
+# change to two decimal places
+df_EL_short$votes_percent <- formatC(df_EL_short$votes_percent, digits = 2, format = "f")
+# convert vote percent to numeric
+df_EL_short$votes_percent <- as.numeric(df_EL_short$votes_percent)
+# convert name to character
+df_EL_short$name.fr <- as.character(df_EL_short$name.fr)
+
+# get votes by name.fr
+df_Votes <-  df_EL_short %>%
+  group_by(name.fr) %>%
+  summarize(sum_votes = sum(votes))
+
+df_Ages <- read.xlsx("/Users/christopherbarrie/Dropbox/Desktop/R/Tunisia maps/Municipales/muni_ages.xlsx", 
+                     sheet="Sheet1")
+
+df_Votes_Ages <- merge(df_Votes, df_Ages, by="name.fr")
+
+# check turnout
+#(sum(df_totals$sum_votes, na.rm=TRUE)/sum(df_totals$total, na.rm=TRUE))*100
+# add turnout to data.frame
+df_Votes_Ages$turnout <- (df_Votes_Ages$sum_votes/df_Votes_Ages$total)*100
+
+# generate population ages as percentage of total
+
+df_Votes_Ages$pop1835 <- (df_Votes_Ages$`18_to_35`/df_Votes_Ages$total)*100
+df_Votes_Ages$pop3640 <- (df_Votes_Ages$`36_to_40`/df_Votes_Ages$total)*100
+df_Votes_Ages$pop4160 <- (df_Votes_Ages$`41_to_60`/df_Votes_Ages$total)*100
+df_Votes_Ages$pop60p <- (df_Votes_Ages$`60_plus`/df_Votes_Ages$total)*100
+```
+
+# TL;DR
+
+Municipalities with more younger registered voters experienced higher turnout. Municipalities with more candidates proportional to the size of the electorate witnessed substantially increased turnout.
+
+## Introduction
+
+On May 6, Tunisia held its first municipal elections since the 2011 Revolution. While the country has now witnessed two rounds of free and fair national elections, municipal elections have been subject to multiple delays. Nonetheless, the elections represent an important landmark in a process of decentralization that many hope will give Tunisians better political representation, especially in poorer interior regions. 
+
+The main headlines coming from the election related to the [apparent low turnout](https://www.aljazeera.com/news/2018/05/tunisia-ennahdha-party-tops-landmark-local-vote-state-tv-180506203029161.html) (at around 33%). While a 33% turnout is not unusually low for local elections, the focus on turnout stems perhaps from an expectation that the holding of the very first free local elections in Tunisia might have inspired more Tunisians to cast their ballot. Tunisia's political class also made every effort to mobilize voters, with President Beji Caid Essebsi calling for a "massive turnout" in the days leading up to the vote. [Despite hopes to the contrary](http://blogs.worldbank.org/arabvoices/will-decentralization-tunisia-bring-young-people-political-mainstream), the expectation prior to the elections was that low turnout would be particularly pronounced among younger Tunisians given their [reduced registration rates](https://nawaat.org/portail/2017/08/22/municipal-elections-youth-abstain-women-to-participate-in-greater-numbers/). On polling day, [several](https://www.reuters.com/article/us-tunisia-election/independent-candidates-get-most-votes-in-tunisias-municipal-election-idUSKBN1I92DW) [reports](https://www.usip.org/publications/2018/05/will-tunisias-first-local-elections-advance-its-democracy) [noted](http://www.dw.com/en/tunisia-low-turnout-as-ennahda-party-claims-victory/a-43678089) that voters seemed to be disproportionately older.
+
+## Crowd-sourced election data
+
+The elections were also notable for the commendable [online community-led efforts](https://www.huffpostmaghreb.com/entry/le-crowdsourcing-en-tunisie-pourrait-il-devenir-une-reference-en-matiere-de-donnees-publiques-cahier-de-la-liberte-y-repond_mg_5af443e6e4b0859d11d0ef8a?utm_hp_ref=mg-elections-municipales-tunisie) to crowd source data on local voting patterns. Before official results were announced by Tunisia's Independent Higher Elections Authority (ISIE), [Cahiers de la Liberté](http://www.cahiersdelaliberte.org/) and [Data4Tunisia](https://www.data4tunisia.org/fr/) were able to publish a complete list of results of each candidate list for all 350 of Tunisia's Municipalities. Below, I combine these data with municipality-level demographic data [provided by the ISIE](http://www.isie.tn/elections/elections-municipales-2018/statistiques/) in order to investigate voting patterns. 
+
+## Age and turnout
+
+I focus on turnout and look first at associations between municipal-level age demographics and reported turnout rates. The map below displays turnout in each municipality of Tunisia for the recent elections.
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+# read in municipalities shapefile
+tun_shp <- readOGR("/Users/christopherbarrie/Dropbox/Desktop/R/Tunisia maps/Municipales/Shapefiles/municipalites1.shp", verbose = FALSE)
+# look at shapefile identifiers and check merge similarity
+tun_shp@data$name.fr <- as.character(tun_shp@data$name.fr)
+# one name.fr incorrectly stored as Arabic in shapefile
+tun_shp@data$name.fr[tun_shp@data$name.fr =="منزل شاكر"] <- "Menzel Chaker"
+tun_shp@data$name.fr[tun_shp@data$FID== "relation/7082337"] <- "Mâatoug Rejim"
+tun_shp@data$name.fr[tun_shp@data$FID== "relation/7090535"] <- "Manouba"
+#merge
+tun_shp <- merge(tun_shp, df_Votes_Ages, by="name.fr")
+# change turnout to two decimal places
+tun_shp@data$turnout <- formatC(tun_shp@data$turnout, digits = 2, format = "f")
+tun_shp@data$turnout <- as.numeric(tun_shp@data$turnout)
+
+pal <- colorQuantile("YlOrRd", domain = tun_shp@data$turnout)
+
+popup <- paste0("<b>","Delegation: ","</b>", tun_shp@data$name.fr, "<br>",
+                "<b>","البلدية: ","</b>", tun_shp@data$name, "<br>",
+                "<b>","Turnout %: ","</b>", tun_shp@data$turnout, "<br>")
+
+leaflet(tun_shp) %>%
+  addPolygons(
+    fillColor = ~pal(turnout),
+    weight = 2,
+    opacity = 1,
+    color = "white",
+    dashArray = "3",
+    fillOpacity = 0.6,
+    popup = popup,
+    highlight = highlightOptions(
+      weight = 5,
+      color = "#666",
+      dashArray = "",
+      fillOpacity = 0.7,
+      bringToFront = TRUE)) %>%
+  addTiles()
+```
+
+\  
+
+The figures below display bivariate correlations between municipality-level demographic indicators of registered voters in different age brackets and turnout (total votes/total registered voters).
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+bspa1 <- ggplot(df_Votes_Ages, aes(x=pop1835, y=turnout)) +
+  geom_point(alpha=0.5, color="#c0392b") +
+  geom_hline(yintercept=1, size=0.4, color="black") +
+  geom_smooth(method= lm, alpha=0.25, color="#c0392b", fill="#c0392b") +
+  theme_minimal() + theme(aspect.ratio=1) +
+  labs(x="18-35 %", y="Turnout %", title="")
+
+bspa2 <- ggplot(df_Votes_Ages, aes(x=pop3640, y=turnout)) +
+  geom_point(alpha=0.5, color="#c0392b") +
+  geom_hline(yintercept=1, size=0.4, color="black") +
+  geom_smooth(method= lm, alpha=0.25, color="#c0392b", fill="#c0392b") +
+  theme_minimal() + theme(aspect.ratio=1) +
+  labs(x="36-40 %", y="Turnout %", title="")
+
+bspa3 <- ggplot(df_Votes_Ages, aes(x=pop4160, y=turnout)) +
+  geom_point(alpha=0.5, color="#c0392b") +
+  geom_hline(yintercept=1, size=0.4, color="black") +
+  geom_smooth(method= lm, alpha=0.25, color="#c0392b", fill="#c0392b") +
+  theme_minimal() + theme(aspect.ratio=1) +
+  labs(x="41-60 %", y="Turnout %", title="")
+
+bspa4 <- ggplot(df_Votes_Ages, aes(x=pop60p, y=turnout)) +
+  geom_point(alpha=0.5, color="#c0392b") +
+  geom_hline(yintercept=1, size=0.4, color="black") +
+  geom_smooth(method= lm, alpha=0.25, color="#c0392b", fill="#c0392b") +
+  theme_minimal() + theme(aspect.ratio=1) +
+  labs(x="61+ %", y="Turnout %", title="")
+
+grid.arrange(bspa1, bspa2, bspa3, bspa4, ncol=2)
+```
+
+Contrary to the expectations of the reports cited above, we see clearly a positive association (r=.33, p<.001) between turnout and the younger, 18-35, category. Conversely, municipalities with a more elderly electorate are more likely to see lower turnout rates; while the 36-40 category shows no significant association in either direction, the 41-60 and 60+ categories are significantly negatively associated with turnout (r=-.17, p=.001; r=-.3, p<.001 respectively). It is important to note here the demographic indicators are measuring percentage of 
+*registered voters* in each age bracket and do not represent overall measures of municipality demographics. Thus, while younger Tunisians registered as voters at lower rates than their older compatriots, it appears that *among those Tunisians who registered*, younger individuals seem to have been more likely to turn up at the polls.
+
+## Competition and turnout
+
+Another headline coming out of the elections had to do with the [rise of independent candidates](http://english.alarabiya.net/en/News/north-africa/2018/05/07/Independent-candidates-emerge-as-stars-of-Tunisian-municipal-elections.html). Independent lists managed to capture some 32% of the vote, relegating more established political forces such as Ennahdha and Nidaa Tounes to second and third places respectively. Given the proliferation of candidate lists, and rise of independent parties, in this election, I thought it'd also be worth looking at how such political competition translated into turnout at the local level. The number of candidate lists in a given municipality is relatively highly correlated with the size of the electorate. This would make sense as we would expect more candidates to register to compete in municipalities with a larger number of voters to potentially win over. Thus, to get a handle on local-level political competition, relative to the size of the electorate, I divide the number of candidate lists in each municipality by the square root of the electorate (I use a square root here as several municpalities have rather inflated electorate sizes). Here, as shown below, we see a strongly positive correlation (r=.61, p<.001) between our measure of local-level political competition and observed turnout. In plainer language, in those districts that had a large number of candidates vying for a relatively small number of votes, more people turned out to vote.
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+# generate number parties var.
+df$obs <- rep(1, nrow(df))
+
+df_NP <-  df %>%
+  group_by(name.fr) %>%
+  select(name.fr, obs) %>%
+  summarize(obs = sum(obs))
+
+colnames(df_NP)[2] <- "numb_Parties"
+# merge
+df_Votes_Ages <- merge(df_Votes_Ages, df_NP, by="name.fr")
+
+df_Votes_Ages$sqrt_pop <- sqrt(df_Votes_Ages$total)
+df_Votes_Ages$numb_Parties_sqrtpop <- (df_Votes_Ages$numb_Parties/df_Votes_Ages$sqrt_pop)
+
+ggplot(df_Votes_Ages, aes(x=numb_Parties_sqrtpop, y=turnout)) +
+  geom_point(alpha=0.5, color="#c0392b") +
+  geom_hline(yintercept=1, size=0.4, color="black") +
+  geom_smooth(method= lm, alpha=0.25, color="#c0392b", fill="#c0392b") +
+  theme_minimal() + theme(aspect.ratio=1) +
+  labs(x="No. parties/sqrt(registered voters)", y="Turnout %", title="")
+```
+
+Overall, then, the picture is perhaps more rosy than initial headlines would suggest. While younger Tunisians may have registered to vote in smaller numbers, the ecological evidence presented here suggests that, among those Tunisians who did register, the younger among them were more likely to actually cast their vote. What is more, the encouragingly large number of candidate lists seems to be associated with increased turnout. 

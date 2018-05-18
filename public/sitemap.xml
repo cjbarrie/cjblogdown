@@ -5,6 +5,15 @@
     
     <url>
     
+      <loc>/post/bpost18062018/</loc>
+      <lastmod>2018-05-18T00:00:00+00:00</lastmod>
+    </url>
+    
+  
+    
+    
+    <url>
+    
       <loc>/post/bpost05062018/</loc>
       <lastmod>2018-05-09T00:00:00+00:00</lastmod>
     </url>
@@ -23,7 +32,7 @@
     
     <url>
     
-      <loc>/publication/iraqident/</loc>
+      <loc>/publication/moby2018/</loc>
       <lastmod>2018-05-01T00:00:00+00:00</lastmod>
     </url>
     
@@ -32,8 +41,8 @@
     
     <url>
     
-      <loc>/publication/moby2018/</loc>
-      <lastmod>2017-12-01T00:00:00+00:00</lastmod>
+      <loc>/publication/iraqident/</loc>
+      <lastmod>2018-05-01T00:00:00+00:00</lastmod>
     </url>
     
   
@@ -253,6 +262,26 @@
     
     <url>
     
+      <loc>/tags/elections/</loc>
+      <lastmod>2018-05-18T00:00:00+00:00</lastmod>
+      <priority>0</priority>
+    </url>
+    
+  
+    
+    
+    <url>
+    
+      <loc>/categories/elections/</loc>
+      <lastmod>2018-05-18T00:00:00+00:00</lastmod>
+      <priority>0</priority>
+    </url>
+    
+  
+    
+    
+    <url>
+    
       <loc>/tags/gis/</loc>
       <lastmod>2018-05-09T00:00:00+00:00</lastmod>
       <priority>0</priority>
@@ -265,6 +294,26 @@
     
       <loc>/categories/gis/</loc>
       <lastmod>2018-05-09T00:00:00+00:00</lastmod>
+      <priority>0</priority>
+    </url>
+    
+  
+    
+    
+    <url>
+    
+      <loc>/tags/opendata/</loc>
+      <lastmod>2018-05-18T00:00:00+00:00</lastmod>
+      <priority>0</priority>
+    </url>
+    
+  
+    
+    
+    <url>
+    
+      <loc>/categories/opendata/</loc>
+      <lastmod>2018-05-18T00:00:00+00:00</lastmod>
       <priority>0</priority>
     </url>
     
@@ -304,7 +353,7 @@
     <url>
     
       <loc>/tags/tunisia/</loc>
-      <lastmod>2018-05-09T00:00:00+00:00</lastmod>
+      <lastmod>2018-05-18T00:00:00+00:00</lastmod>
       <priority>0</priority>
     </url>
     
@@ -314,7 +363,7 @@
     <url>
     
       <loc>/categories/tunisia/</loc>
-      <lastmod>2018-05-09T00:00:00+00:00</lastmod>
+      <lastmod>2018-05-18T00:00:00+00:00</lastmod>
       <priority>0</priority>
     </url>
     

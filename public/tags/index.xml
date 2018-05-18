@@ -49,11 +49,29 @@
     </item>
     
     <item>
+      <title>Elections</title>
+      <link>/tags/elections/</link>
+      <pubDate>Fri, 18 May 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/elections/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>GIS</title>
       <link>/tags/gis/</link>
       <pubDate>Wed, 09 May 2018 00:00:00 +0000</pubDate>
       
       <guid>/tags/gis/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>OpenData</title>
+      <link>/tags/opendata/</link>
+      <pubDate>Fri, 18 May 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/opendata/</guid>
       <description></description>
     </item>
     
@@ -69,7 +87,7 @@
     <item>
       <title>Tunisia</title>
       <link>/tags/tunisia/</link>
-      <pubDate>Wed, 09 May 2018 00:00:00 +0000</pubDate>
+      <pubDate>Fri, 18 May 2018 00:00:00 +0000</pubDate>
       
       <guid>/tags/tunisia/</guid>
       <description></description>

@@ -197,4 +197,32 @@ ggplot(df_Votes_Ages, aes(x=numb_Parties_sqrtpop, y=turnout)) +
   labs(x="No. parties/sqrt(registered voters)", y="Turnout %", title="")
 ```
 
-Overall, then, the picture is perhaps more rosy than initial headlines would suggest. While younger Tunisians may have registered to vote in smaller numbers, the ecological evidence presented here suggests that, among those Tunisians who did register, the younger among them were more likely to actually cast their vote. What is more, the encouragingly large number of candidate lists seems to be associated with increased turnout. 
+Overall, then, the picture is perhaps more rosy than initial headlines would suggest. While younger Tunisians may have registered to vote in smaller numbers, the ecological evidence presented here suggests that, among those Tunisians who did register, the younger among them were more likely to actually cast their vote. What is more, the encouragingly large number of candidate lists seems to be associated with increased turnout.
+
+## Update 1
+
+A reader notes that a more common measure of competition in the political science literature is the "effective number of parties" (ENP), first elaborated in a [1979 journal article](http://journals.sagepub.com/doi/10.1177/001041407901200101) in *Comparative Political Studies* by Laakso and Taagepera. This is calculated as the reciprocal of the sum of the squares of the proportion of the vote each party (or, here, candidate list) gets in the unit of observation (here, municipalities). I test whether the association between turnout and competition highlighted above still stands when using this alternative measure.
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+# generate ENP (Laakso-Taagepera) by municipality 
+
+# get votes by name.fr
+df_EL_short$sqrt_votes_prop <- (df_EL_short$votes_prop)^2
+
+df_Votes1 <-  df_EL_short %>%
+  group_by(name.fr) %>%
+  summarize(sum_sqrt_votes_prop = sum(sqrt_votes_prop))
+
+df_Votes1$ENP <- 1/(df_Votes1$sum_sqrt_votes_prop)
+
+df_Votes_Ages <- merge(df_Votes_Ages, df_Votes1, by="name.fr")
+
+ggplot(df_Votes_Ages, aes(x=ENP, y=turnout)) +
+  geom_point(alpha=0.5, color="#c0392b") +
+  geom_hline(yintercept=1, size=0.4, color="black") +
+  geom_smooth(method= lm, alpha=0.25, color="#c0392b", fill="#c0392b") +
+  theme_minimal() + theme(aspect.ratio=1) +
+  labs(x="ENP", y="Turnout %", title="")
+```
+
+As should be clear, the relationship between what I'm calling political competition, as measured by the ENP, and turnout does not hold with this alternative measure. I would nonetheless claim that my, admittedly more crude, measure does still validly capture something, even if we should call it something other than political competition. The ENP takes into account each list's ultimate vote share. The rationale behind the ENP is to provide a measure of the "effective" competition in a given electoral system. Thus, in the case of the US, while Greens and Independents might run for the office of the Presidency, we can be pretty much certain that either a Democrat or Republican will win. In other words, the "effective" number of parties is around two (something that will be captured by the ENP as it takes into account the observed vote share of each list). The measure I use above, namely no. candidates denominated by square root of population, does, I think, still give us a measure of competition, but we might more accurately call it something like "electoral mobilization". Effectively, the measure is capturing the amount of mobilization (as proxied by number of lists competing in the municipality) relative to the size of the electorate in the municipality. Thus, even if there were several lists that obtained a very small proportion of the overall vote share in a given municipality, the measure I use still captures (rather than discounts) the potential increase in electoral mobilization that would have come with their competing; something that, in turn, may have impacted on turnout. The increase in turnout we might attribute, in turn, to a number of mechanisms---e.g., increased information; more encouragement to vote; individual belief that the race might be tight and thus an individual's vote would count more (potentially particularly pronounced in the low information setting of the very first local election). Thanks to the reader for prompting me to think more deeply about this!

@@ -21,6 +21,11 @@ weight = 5
   course = "DPhil in Sociology"
   institution = "University of Oxford"
   year = "2016--"
+  
+[[education.courses]]
+  course = "Visiting Scholar"
+  institution = "University of North Carolina, Chapel Hill"
+  year = "2018"
 
 [[education.courses]]
   course = "MSc in Sociology"

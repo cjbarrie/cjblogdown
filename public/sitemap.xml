@@ -185,6 +185,15 @@
     
     <url>
     
+      <loc>/talk/unc2018/</loc>
+      <lastmod>2017-01-01T00:00:00+00:00</lastmod>
+    </url>
+    
+  
+    
+    
+    <url>
+    
       <loc>/project/deep-learning/</loc>
       <lastmod>2016-04-27T00:00:00+01:00</lastmod>
     </url>
@@ -231,7 +240,7 @@
     
     <url>
     
-      <loc>/tags/contentious-politics/</loc>
+      <loc>/categories/contentious-politics/</loc>
       <lastmod>2018-05-09T00:00:00+00:00</lastmod>
       <priority>0</priority>
     </url>
@@ -241,7 +250,7 @@
     
     <url>
     
-      <loc>/categories/contentious-politics/</loc>
+      <loc>/tags/contentious-politics/</loc>
       <lastmod>2018-05-09T00:00:00+00:00</lastmod>
       <priority>0</priority>
     </url>
@@ -271,16 +280,6 @@
     
     <url>
     
-      <loc>/tags/elections/</loc>
-      <lastmod>2018-05-18T00:00:00+00:00</lastmod>
-      <priority>0</priority>
-    </url>
-    
-  
-    
-    
-    <url>
-    
       <loc>/categories/elections/</loc>
       <lastmod>2018-05-18T00:00:00+00:00</lastmod>
       <priority>0</priority>
@@ -291,8 +290,8 @@
     
     <url>
     
-      <loc>/tags/gis/</loc>
-      <lastmod>2018-05-09T00:00:00+00:00</lastmod>
+      <loc>/tags/elections/</loc>
+      <lastmod>2018-05-18T00:00:00+00:00</lastmod>
       <priority>0</priority>
     </url>
     
@@ -311,8 +310,8 @@
     
     <url>
     
-      <loc>/tags/opendata/</loc>
-      <lastmod>2018-05-18T00:00:00+00:00</lastmod>
+      <loc>/tags/gis/</loc>
+      <lastmod>2018-05-09T00:00:00+00:00</lastmod>
       <priority>0</priority>
     </url>
     
@@ -322,6 +321,16 @@
     <url>
     
       <loc>/categories/opendata/</loc>
+      <lastmod>2018-05-18T00:00:00+00:00</lastmod>
+      <priority>0</priority>
+    </url>
+    
+  
+    
+    
+    <url>
+    
+      <loc>/tags/opendata/</loc>
       <lastmod>2018-05-18T00:00:00+00:00</lastmod>
       <priority>0</priority>
     </url>
@@ -361,7 +370,7 @@
     
     <url>
     
-      <loc>/tags/tunisia/</loc>
+      <loc>/categories/tunisia/</loc>
       <lastmod>2018-05-18T00:00:00+00:00</lastmod>
       <priority>0</priority>
     </url>
@@ -371,7 +380,7 @@
     
     <url>
     
-      <loc>/categories/tunisia/</loc>
+      <loc>/tags/tunisia/</loc>
       <lastmod>2018-05-18T00:00:00+00:00</lastmod>
       <priority>0</priority>
     </url>

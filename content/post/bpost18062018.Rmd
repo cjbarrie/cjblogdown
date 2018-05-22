@@ -75,7 +75,7 @@ df_Votes_Ages$pop60p <- (df_Votes_Ages$`60_plus`/df_Votes_Ages$total)*100
 
 # TL;DR
 
-Municipalities with more younger registered voters experienced higher turnout. Municipalities with more candidates proportional to the size of the electorate witnessed substantially increased turnout.
+Municipalities with a greater number of younger registered voters experienced higher turnout. Municipalities with more candidates proportional to the size of the electorate witnessed substantially increased turnout.
 
 ## Introduction
 

@@ -53,13 +53,13 @@ While only recently introduced to election night coverage, hexmaps have a longis
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
 library(magick)
-img1 <- image_read("/Users/christopherbarrie/Dropbox/Desktop/R/Blogdown/blogdown/static/img/hex_lond.jpg")
-img2 <- image_read("/Users/christopherbarrie/Dropbox/Desktop/R/Blogdown/blogdown/static/img/hex_lond1.jpg")
+img1 <- image_read("/Users/christopherbarrie/Dropbox/Desktop/R/Blogdown/cjblogdown/static/img/hex_lond.jpg")
+img2 <- image_read("/Users/christopherbarrie/Dropbox/Desktop/R/Blogdown/cjblogdown/static/img/hex_lond1.jpg")
 ```
 ```{r, echo=FALSE,  warning=FALSE, message=FALSE}
 library(magick)
 appimage <- image_append(c(img1, img2))
-image_write(appimage, path = "/Users/christopherbarrie/Dropbox/Desktop/R/Blogdown/blogdown/static/img/appimage.jpg", format = "jpg")
+image_write(appimage, path = "/Users/christopherbarrie/Dropbox/Desktop/R/Blogdown/cjblogdown/static/img/appimage.jpg", format = "jpg")
 ```
 
 ![Source: https://www.flickr.com/photos/britishlibrary/tags/sysnum002122317](/img/appimage.jpg)
@@ -192,14 +192,14 @@ ggplot(shdf, aes(long,
 
 ```{r, echo=FALSE,  warning=FALSE, message=FALSE}
 library(magick)
-tunmult <- image_read_pdf("/Users/christopherbarrie/Dropbox/Desktop/R/Blogdown/blogdown/static/img/tunmult.pdf")
+tunmult <- image_read_pdf("/Users/christopherbarrie/Dropbox/Desktop/R/Blogdown/cjblogdown/static/img/tunmult.pdf")
 tunmult
 ```
 And there we have it. Or so I thought. Looking at the patterns of protest diffusion in this map I noticed some discrepancies between what we see here and the map I tweeted back in January. I did a bit of investigating and noticed that, presumably in order to preserve the shape of Tunisia's boundaries, the algorithm used to generate the hexmap had pushed a lot of the delegations of Tunisia's capital, Tunis, down into the central and southern regions of the country. The map below illustrates this. Here, I plot the results of the last pane of the multiple above but highlight in bold the delegations in the capital, Tunis. Clearly they are not where they should be. 
 
 ```{r, echo=FALSE,  warning=FALSE, message=FALSE}
 library(magick)
-tunmult29 <- image_read_pdf("/Users/christopherbarrie/Dropbox/Desktop/R/Blogdown/blogdown/static/img/tunmult29.pdf")
+tunmult29 <- image_read_pdf("/Users/christopherbarrie/Dropbox/Desktop/R/Blogdown/cjblogdown/static/img/tunmult29.pdf")
 tunmult29
 ```
 
@@ -225,7 +225,7 @@ qtm(tun_area)
 
 ```{r, echo=FALSE,  warning=FALSE, message=FALSE}
 library(magick)
-tuncarto <- image_read_pdf("/Users/christopherbarrie/Dropbox/Desktop/R/Blogdown/blogdown/static/img/tuncarto.pdf")
+tuncarto <- image_read_pdf("/Users/christopherbarrie/Dropbox/Desktop/R/Blogdown/cjblogdown/static/img/tuncarto.pdf")
 tuncarto
 ```
 
@@ -233,7 +233,7 @@ Yes, I know, it doesn't look great at this stage but stay with me. Even though t
 
 ```{r, echo=FALSE,  warning=FALSE, message=FALSE}
 library(magick)
-tuncartohex <- image_read_pdf("/Users/christopherbarrie/Dropbox/Desktop/R/Blogdown/blogdown/static/img/tuncartohex.pdf")
+tuncartohex <- image_read_pdf("/Users/christopherbarrie/Dropbox/Desktop/R/Blogdown/cjblogdown/static/img/tuncartohex.pdf")
 tuncartohex
 ```
 

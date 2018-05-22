@@ -7,10 +7,20 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&amp;copy; Christopher Barrie 2018</copyright>
-    <lastBuildDate>Fri, 18 May 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 22 May 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/categories/elections/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Younger electorates vote independent in Tunisian Municipal Elections</title>
+      <link>/post/bpost05222018/</link>
+      <pubDate>Tue, 22 May 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/post/bpost05222018/</guid>
+      <description>TL;DR Municipalities with a greater number of younger registered voters saw a higher vote share for independent lists. Similarly, younger electorates were less likely to vote for established parties.
+Introduction On May 6, Tunisia held its first municipal elections since the 2011 Revolution. In a previous post, I showed that younger municipalities and municipalities with more political competition/electoral mobilization saw higher turnout. In this post, I look at associations between municipality-level demographics and voting patterns.</description>
+    </item>
     
     <item>
       <title>Youth and competition boost turnout in Tunisian Municipal Elections</title>
@@ -18,8 +28,8 @@
       <pubDate>Fri, 18 May 2018 00:00:00 +0000</pubDate>
       
       <guid>/post/bpost18062018/</guid>
-      <description>TL;DR Municipalities with more younger registered voters experienced higher turnout. Municipalities with more candidates proportional to the size of the electorate witnessed substantially increased turnout.
-Introduction On May 6, Tunisia held its first municipal elections since the 2011 Revolution. While the country has now witnessed two rounds of free and fair national elections, municipal elections have been subject to multiple delays. Nonetheless, the elections represent an important landmark in a process of decentralization that many hope will give Tunisians better political representation, especially in poorer interior regions.</description>
+      <description>TL;DR Municipalities with a greater number of younger registered voters experienced higher turnout. Municipalities with more candidates proportional to the size of the electorate witnessed substantially increased turnout.
+Introduction On May 6, Tunisia held its first municipal elections since the 2011 Revolution. While the country has now witnessed two rounds of free and fair national elections, municipal elections have been subject to multiple delays.</description>
     </item>
     
   </channel>

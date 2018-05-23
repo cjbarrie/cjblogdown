@@ -387,14 +387,14 @@ library(broom)</code></pre>
 <pre class="r"><code>qtm(tun_shp)
 ## Warning: Currect projection of shape tun_shp unknown. Long-lat (WGS84) is
 ## assumed.</code></pre>
-<p><img src="/rmarkdown-libs/figure-html4/unnamed-chunk-8-1.png" width="672" /></p>
+<p><img src="/post/bpost05062018_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
 <p>This looks about right! However, as we know, we want to create a hexmap from the polygon information contained in the shapefile. To do this, following the <a href="https://github.com/jbaileyh/geogrid/blob/master/README.md">advice</a> of Joesph Bailey, we first set about plotting a number of potential hexmaps (setting <code>grid_type</code> to hexagonal) generated with the geogrid package so that we can select our favourite.</p>
 <pre class="r"><code>par(mfrow = c(2, 3), mar = c(0, 0, 2, 0))
 for (i in 1:6) {
   new_cells &lt;- calculate_grid(shape = tun_shp,learning_rate = 0.03, grid_type = &quot;hexagonal&quot;, seed = i)
   plot(new_cells, main = paste(&quot;Seed&quot;, i, sep = &quot; &quot;))
 }</code></pre>
-<p><img src="/rmarkdown-libs/figure-html4/unnamed-chunk-9-1.png" width="672" /></p>
+<p><img src="/post/bpost05062018_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
 <p>I like number 2 as it seems to preserve the shape of Tunisia’s boundaries and retains the separate geography of one of the islands off its eastern border. I therefore select seed 2 and go about generating the new shapefile and assigning polygons from the old to the new shapefile with:</p>
 <pre class="r"><code>new_cells_hex &lt;- calculate_grid(shape = tun_shp, grid_type = &quot;hexagonal&quot;, seed = 2)
 resulthex &lt;- assign_polygons(tun_shp, new_cells_hex)</code></pre>
@@ -449,9 +449,9 @@ ggplot(shdf, aes(long,
   facet_wrap(~ date1) +
   coord_equal() +theme_void() +
   theme(legend.key = element_rect(&quot;black&quot;))</code></pre>
-<p><img src="/rmarkdown-libs/figure-html4/unnamed-chunk-21-1.png" width="1275" />
+<p><img src="/post/bpost05062018_files/figure-html/unnamed-chunk-21-1.png" width="1275" />
 And there we have it. Or so I thought. Looking at the patterns of protest diffusion in this map I noticed some discrepancies between what we see here and the map I tweeted back in January. I did a bit of investigating and noticed that, presumably in order to preserve the shape of Tunisia’s boundaries, the algorithm used to generate the hexmap had pushed a lot of the delegations of Tunisia’s capital, Tunis, down into the central and southern regions of the country. The map below illustrates this. Here, I plot the results of the last pane of the multiple above but highlight in bold the delegations in the capital, Tunis. Clearly they are not where they should be.</p>
-<p><img src="/rmarkdown-libs/figure-html4/unnamed-chunk-22-1.png" width="1275" /></p>
+<p><img src="/post/bpost05062018_files/figure-html/unnamed-chunk-22-1.png" width="1275" /></p>
 </div>
 <div id="troubleshooting" class="section level1">
 <h1>Troubleshooting</h1>
@@ -464,9 +464,9 @@ x &lt;- areaPolygon(carto_tun_shp)</code></pre>
 <pre class="r"><code>carto_tun_shp@data$AREA &lt;- 1/x
 tun_area &lt;- cartogram(carto_tun_shp, &quot;AREA&quot;)
 qtm(tun_area)</code></pre>
-<p><img src="/rmarkdown-libs/figure-html4/unnamed-chunk-25-1.png" width="1275" /></p>
+<p><img src="/post/bpost05062018_files/figure-html/unnamed-chunk-25-1.png" width="1275" /></p>
 <p>Yes, I know, it doesn’t look great at this stage but stay with me. Even though the delegation boundaries seem weirdly distorted here, they are still more uniform in size than before, which could help us with producing our hexmap. You can also experiment with this stage, by calculating e.g. 0.5/AREA or otherwise. We now can use this new “sp” file to generate the hexmaps using the identical procedure to that which we used before. I’ll spare you the code of these steps as you’re essentially repeating the same steps as above. With some experimentation, I eventually managed to produce a hexmap of Tunisia the geography of which was precise enough to accurately depict what I wanted to map—namely, the diffusion of protest. On this map, as you can see below, the delegations of the capital, Tunis (highlighted in bold), are more appropriately positioned in the northeast of the country. Other delegations (after carrying out other checks that I won’t bore you with here) are also more appropriately positioned. What is more, the overall shape of the map is still identifiable as Tunisia, even if its shape doesn’t map as precisely onto the original shapefile as previously.</p>
-<p><img src="/rmarkdown-libs/figure-html4/unnamed-chunk-26-1.png" width="1275" /></p>
+<p><img src="/post/bpost05062018_files/figure-html/unnamed-chunk-26-1.png" width="1275" /></p>
 <p>Then with the magic of the <code>gganimate</code> extension to the <code>ggplot2</code> <a href="https://cran.r-project.org/web/packages/ggplot2/index.html">package</a>, we can plot the diffusion of protest on the newly created hexmap. And, after all that, we’re sort of back to where we started. Except better… I think.</p>
 <p><img src="/img/tuncartohex.gif" /></p>
 <p>Thanks for reading!</p>

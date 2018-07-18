@@ -1,5 +1,5 @@
 +++
-title = "Sect, Nation, and Identity after the Fall of Mosul: Evidence from a Quasi-Natural Experiment"
+title = "Sect, Nation, and Identity after the Fall of Mosul: Evidence from a Natural Experiment"
 date = "2018-05-01T00:00:00"
 
 # Authors. Comma separated list, e.g. `["Bob Smith", "David Jones"]`.
@@ -23,7 +23,7 @@ publication_types = ["3"]
 # Abstract and optional shortened version.
 # Note that in abstract it is read in Latex and .md meaning speech marks have to be
 # Latexified by \"word\"
-abstract = "What are the identity consequences of civil war? A large literature operationalizes ethnicity as an exogenous variable in the study of conflict. A parallel literature theorizes identity as endogenous to war. Capturing such endogenous variation is hindered by the difficulties of conducting social inquiry in conflict settings. I address this gap by exploiting a unique source of exogenous variation---the fall of Mosul to the Islamic State of Iraq and al-Sham---during the fieldwork for a nationally representative survey in Iraq. I find systematic differences in the identity responses of Sunni and Shi'i Iraqis. While Shi'i Iraqis cleave to the nation, Sunni Arabs mobilize behind an Arab identity. The finding for Sunnis, however, is confounded by tribal networks: in areas with high levels of clan ties, Sunnis rally behind a national identity. The findings represent rare systematic empirical evidence of the endogeneity, and subethnic heterogeneity, of identity in conflict."
+abstract = "What are the identity consequences of war? Do ethnic groups rally behind the nation when confronted with Islamist territorial threat? Do the identity responses of groups exhibit subethnic heterogeneity? A large literature theorizes identity as endogenous to war. However, identifying such endogenous variation is hindered by the difficulties of conducting social inquiry in conflict settings. I address this gap by exploiting a unique source of exogenous variation---the fall of Mosul to the Islamic State of Iraq and al-Sham---during the fieldwork for a nationally representative survey in Iraq. I find systematic differences in the identity responses of Sunni and Shi'i Iraqis. While Shi'is cleave to the nation, Sunnis mobilize behind an Arab identity. The finding for Sunnis, however, is confounded by tribal presence: in areas with high levels of clan ties, Sunnis rally behind the nation. Observed patterns are explicable according to inter-ethnic differences in threat perception and availability of cross-cutting organizational forms. The findings represent rare systematic empirical evidence of the endogeneity, and subethnic heterogeneity, of identity in wartime."
 abstract_short = ""
 
 # Featured image thumbnail (optional)

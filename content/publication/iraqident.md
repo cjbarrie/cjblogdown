@@ -47,7 +47,7 @@ url_slides = ""
 url_video = ""
 url_poster = ""
 url_source = ""
-#url_custom = [{name = "View working paper", url = ""}]
+url_custom = [{name = "View working paper", url = "https://osf.io/preprints/socarxiv/g247r/"}]
 
 # Does the content use math formatting?
 math = true

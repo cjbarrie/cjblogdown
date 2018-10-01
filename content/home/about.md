@@ -54,4 +54,4 @@ While united by their focus on extra-institutional forms of social and political
 
 Most abstractly, my focus on conflict and contention stems from a fascination with the ability of events, and processes endogenous to them, to shape outcomes---that is, for events to be the independent rather than dependent variable of interest in social inquiry.
 
-{{% staticref "files/cv_08_2018.pdf" %}}Download my CV{{% /staticref %}}
+{{% staticref "files/cv_10_2018.pdf" %}}Download my CV{{% /staticref %}}

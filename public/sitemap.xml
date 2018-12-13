@@ -249,7 +249,7 @@
     
     <url>
     
-      <loc>/tags/contentious-politics/</loc>
+      <loc>/categories/contentious-politics/</loc>
       <lastmod>2018-05-09T00:00:00+00:00</lastmod>
       <priority>0</priority>
     </url>
@@ -259,7 +259,7 @@
     
     <url>
     
-      <loc>/categories/contentious-politics/</loc>
+      <loc>/tags/contentious-politics/</loc>
       <lastmod>2018-05-09T00:00:00+00:00</lastmod>
       <priority>0</priority>
     </url>
@@ -289,16 +289,6 @@
     
     <url>
     
-      <loc>/tags/elections/</loc>
-      <lastmod>2018-05-23T00:00:00+00:00</lastmod>
-      <priority>0</priority>
-    </url>
-    
-  
-    
-    
-    <url>
-    
       <loc>/categories/elections/</loc>
       <lastmod>2018-05-23T00:00:00+00:00</lastmod>
       <priority>0</priority>
@@ -309,8 +299,8 @@
     
     <url>
     
-      <loc>/tags/gis/</loc>
-      <lastmod>2018-05-09T00:00:00+00:00</lastmod>
+      <loc>/tags/elections/</loc>
+      <lastmod>2018-05-23T00:00:00+00:00</lastmod>
       <priority>0</priority>
     </url>
     
@@ -329,8 +319,8 @@
     
     <url>
     
-      <loc>/tags/opendata/</loc>
-      <lastmod>2018-05-23T00:00:00+00:00</lastmod>
+      <loc>/tags/gis/</loc>
+      <lastmod>2018-05-09T00:00:00+00:00</lastmod>
       <priority>0</priority>
     </url>
     
@@ -340,6 +330,16 @@
     <url>
     
       <loc>/categories/opendata/</loc>
+      <lastmod>2018-05-23T00:00:00+00:00</lastmod>
+      <priority>0</priority>
+    </url>
+    
+  
+    
+    
+    <url>
+    
+      <loc>/tags/opendata/</loc>
       <lastmod>2018-05-23T00:00:00+00:00</lastmod>
       <priority>0</priority>
     </url>
@@ -379,7 +379,7 @@
     
     <url>
     
-      <loc>/tags/tunisia/</loc>
+      <loc>/categories/tunisia/</loc>
       <lastmod>2018-05-23T00:00:00+00:00</lastmod>
       <priority>0</priority>
     </url>
@@ -389,7 +389,7 @@
     
     <url>
     
-      <loc>/categories/tunisia/</loc>
+      <loc>/tags/tunisia/</loc>
       <lastmod>2018-05-23T00:00:00+00:00</lastmod>
       <priority>0</priority>
     </url>

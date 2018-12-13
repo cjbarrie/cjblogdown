@@ -5,6 +5,15 @@
     
     <url>
     
+      <loc>/post/wapo/</loc>
+      <lastmod>2018-12-12T00:00:00+00:00</lastmod>
+    </url>
+    
+  
+    
+    
+    <url>
+    
       <loc>/publication/moby2018/</loc>
       <lastmod>2018-06-01T00:00:00+00:00</lastmod>
     </url>
@@ -230,6 +239,15 @@
     
     <url>
     
+      <loc>/post/getting-started/</loc>
+      <lastmod>2018-01-13T00:00:00+00:00</lastmod>
+    </url>
+    
+  
+    
+    
+    <url>
+    
       <loc>/categories/</loc>
       <priority>0</priority>
     </url>
@@ -249,7 +267,7 @@
     
     <url>
     
-      <loc>/categories/contentious-politics/</loc>
+      <loc>/tags/contentious-politics/</loc>
       <lastmod>2018-05-09T00:00:00+00:00</lastmod>
       <priority>0</priority>
     </url>
@@ -259,7 +277,7 @@
     
     <url>
     
-      <loc>/tags/contentious-politics/</loc>
+      <loc>/categories/contentious-politics/</loc>
       <lastmod>2018-05-09T00:00:00+00:00</lastmod>
       <priority>0</priority>
     </url>
@@ -289,16 +307,6 @@
     
     <url>
     
-      <loc>/categories/elections/</loc>
-      <lastmod>2018-05-23T00:00:00+00:00</lastmod>
-      <priority>0</priority>
-    </url>
-    
-  
-    
-    
-    <url>
-    
       <loc>/tags/elections/</loc>
       <lastmod>2018-05-23T00:00:00+00:00</lastmod>
       <priority>0</priority>
@@ -309,8 +317,8 @@
     
     <url>
     
-      <loc>/categories/gis/</loc>
-      <lastmod>2018-05-09T00:00:00+00:00</lastmod>
+      <loc>/categories/elections/</loc>
+      <lastmod>2018-05-23T00:00:00+00:00</lastmod>
       <priority>0</priority>
     </url>
     
@@ -329,8 +337,38 @@
     
     <url>
     
-      <loc>/categories/opendata/</loc>
-      <lastmod>2018-05-23T00:00:00+00:00</lastmod>
+      <loc>/categories/gis/</loc>
+      <lastmod>2018-05-09T00:00:00+00:00</lastmod>
+      <priority>0</priority>
+    </url>
+    
+  
+    
+    
+    <url>
+    
+      <loc>/tags/isis/</loc>
+      <lastmod>2018-12-12T00:00:00+00:00</lastmod>
+      <priority>0</priority>
+    </url>
+    
+  
+    
+    
+    <url>
+    
+      <loc>/categories/isis/</loc>
+      <lastmod>2018-12-12T00:00:00+00:00</lastmod>
+      <priority>0</priority>
+    </url>
+    
+  
+    
+    
+    <url>
+    
+      <loc>/tags/monkey-cage/</loc>
+      <lastmod>2018-12-12T00:00:00+00:00</lastmod>
       <priority>0</priority>
     </url>
     
@@ -349,8 +387,38 @@
     
     <url>
     
+      <loc>/categories/opendata/</loc>
+      <lastmod>2018-05-23T00:00:00+00:00</lastmod>
+      <priority>0</priority>
+    </url>
+    
+  
+    
+    
+    <url>
+    
       <loc>/project/</loc>
       <lastmod>2016-04-27T00:00:00+01:00</lastmod>
+      <priority>0</priority>
+    </url>
+    
+  
+    
+    
+    <url>
+    
+      <loc>/tags/protest/</loc>
+      <lastmod>2018-12-12T00:00:00+00:00</lastmod>
+      <priority>0</priority>
+    </url>
+    
+  
+    
+    
+    <url>
+    
+      <loc>/categories/protest/</loc>
+      <lastmod>2018-12-12T00:00:00+00:00</lastmod>
       <priority>0</priority>
     </url>
     
@@ -379,8 +447,8 @@
     
     <url>
     
-      <loc>/categories/tunisia/</loc>
-      <lastmod>2018-05-23T00:00:00+00:00</lastmod>
+      <loc>/tags/tunisia/</loc>
+      <lastmod>2018-12-12T00:00:00+00:00</lastmod>
       <priority>0</priority>
     </url>
     
@@ -389,8 +457,8 @@
     
     <url>
     
-      <loc>/tags/tunisia/</loc>
-      <lastmod>2018-05-23T00:00:00+00:00</lastmod>
+      <loc>/categories/tunisia/</loc>
+      <lastmod>2018-12-12T00:00:00+00:00</lastmod>
       <priority>0</priority>
     </url>
     

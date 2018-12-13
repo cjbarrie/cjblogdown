@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Protest on Christopher Barrie</title>
+    <link>/tags/protest/</link>
+    <description>Recent content in Protest on Christopher Barrie</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>&amp;copy; Christopher Barrie 2018</copyright>
+    <lastBuildDate>Wed, 12 Dec 2018 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/tags/protest/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Is protest a safety valve against ISIS in Tunisia?</title>
+      <link>/post/wapo/</link>
+      <pubDate>Wed, 12 Dec 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/post/wapo/</guid>
+      <description>Link here to the Washington Post Monkey Cage blog post Neil and I wrote re our findings on protest and ISIS in Tunisia. While graduate unemployment is a positive predictor of recruitment, we find suggestive evidence that protest might function to insulate individuals against the pull of ISIS.</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,20 @@
+---
+title: "Is protest a safety valve against ISIS in Tunisia?"
+author: "Christopher Barrie and Neil Ketchley"
+date: 2018-12-12
+categories: ["Protest", "ISIS", "Tunisia"]
+tags: ["Protest", "ISIS", "Tunisia", "Monkey Cage"]
+image_preview: 'bbcmap.jpg'
+---
+
+
+```{r setup, include=FALSE}
+# The code chunk below (opts_chunk) means that code is collapsed into one 
+# greyed box and looks nicer. i.e., this sets collapse as global option for the
+# .Rmd file
+
+knitr::opts_chunk$set(collapse = TRUE)
+```
+
+Link [here](https://www.washingtonpost.com/news/monkey-cage/wp/2018/12/10/is-protest-a-safety-valve-against-isis-in-tunisia/?utm_term=.c26bc6b1dc5f) to the *Washington Post Monkey Cage* [blog](https://www.washingtonpost.com/news/monkey-cage/?utm_term=.713e2d9ba0fa) post Neil and I wrote re our findings on protest and ISIS in Tunisia. While graduate unemployment is a positive predictor of recruitment, we find suggestive evidence that protest might function to insulate individuals against the pull of ISIS.
+

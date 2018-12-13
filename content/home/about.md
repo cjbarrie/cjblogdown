@@ -46,12 +46,8 @@ weight = 5
 
 # About me
 
-I am a DPhil Candidate in Sociology at Nuffield College, University of Oxford. Prior to embarking on my doctoral research, I earned my BA in European and Middle Eastern Languages from Oxford, before completing an MSc in Middle East Politics at SOAS and an MSc in Sociology at Oxford.
+I am a political sociologist of protest and conflict in the Middle East and North Africa (MENA). My current book project is on the Tunisian Revolution. I have published work work in *Mobilization* and *Nations and Nationalism*. I have ongoing projects on identity after the rise of ISIS in Iraq, post-revolutionary protest in Egypt and Tunisia, and anti-Christian violence in Egypt. Other interests include nationalism, democratization, historical political sociology, and computational social science (particularly GIS). My next book project looks to chart and explain the rise of anti-colonial nationalism across the MENA and sub-Saharan Africa. 
 
-My research focuses on contentious politics and conflict in the Middle East and North Africa (MENA). In my published work, and work currently under review, I have tackled questions relating to the emergence of mass nationalism in colonial-era Tunisia, the dynamics of labour protest after the 2011 Egyptian Revolution, the shifting correlates of protest and participation in the 2011 Tunisian Revolution, and the identity consequences of conflict threat in Iraq after the fall of Mosul to ISIS in 2014. 
+Currently, I am a DPhil Candidate in Sociology at Nuffield College, University of Oxford. From September 2019, I will be Postdoctoral Prize Research Fellow in Sociology at Nuffield. 
 
-While united by their focus on extra-institutional forms of social and political behaviour, these pieces of work speak to a diverse range of research questions; from classic questions of historical sociology surrounding the advent of mass nationalism; to central questions in comparative democratization concerning the role of labour movements in transitional contexts and the determinants of mass mobilization for democracy; to a key and growing research agenda in conflict studies probing the endogenous dynamics of conflict and their role in shaping the conduct and consequences of warfare. 
-
-Most abstractly, my focus on conflict and contention stems from a fascination with the ability of events, and processes endogenous to them, to shape outcomes---that is, for events to be the independent rather than dependent variable of interest in social inquiry.
-
-{{% staticref "files/cv_10_2018.pdf" %}}Download my CV{{% /staticref %}}
+{{% staticref "files/cv_12_2018.pdf" %}}Download my CV{{% /staticref %}}

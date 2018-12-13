@@ -47,7 +47,7 @@ url_slides = ""
 url_video = ""
 url_poster = ""
 url_source = ""
-url_custom = [{name = "View working paper", url = "https://www.academia.edu/36427987/Days_of_Protest_Fridays_of_Revolution_Focal_Points_and_Mass_Mobilization_in_Egypt_and_Tunisia"}]
+#url_custom = [{name = "View working paper", url = "https://www.academia.edu/36427987/Days_of_Protest_Fridays_of_Revolution_Focal_Points_and_Mass_Mobilization_in_Egypt_and_Tunisia"}]
 
 # Does the content use math formatting?
 math = true

@@ -23,7 +23,7 @@ publication_types = ["3"]
 # Abstract and optional shortened version.
 # Note that in abstract it is read in Latex and .md meaning speech marks have to be
 # Latexified by \"word\"
-abstract = "Research on democratic revolution treats revolutionary protest, and revolutionary protest participation, as unitary events. This conceptualization is at odds with how 'revolutionary' protest often unfolds---protest does not begin life as democratic or revolutionary but grows in a process of positive feedback, incorporating new constituencies and generating new demands. Using an original event catalogue of protest during the twenty-nine days of the Tunisian Revolution (n=631), alongside survey data, I show that the correlates of protest occurrence and participation can change significantly over the course of a revolution. The effect of economic development on protest occurrence reverses sign, while a commitment to democracy is a substantive predictor of protest participation only at the close of the revolution. Methodologically, the findings demonstrate the potential for faulty inference in the absence of proper disaggregation. Theoretically, they provide support for an understanding of revolution as process, and point to the endogenous emergence of democratic demands."
+abstract = ""
 abstract_short = ""
 
 # Featured image thumbnail (optional)
@@ -47,7 +47,7 @@ url_slides = ""
 url_video = ""
 url_poster = ""
 url_source = ""
-url_custom = [{name = "View working paper", url = "https://osf.io/preprints/socarxiv/eu5b4/"}]
+#url_custom = [{name = "View working paper", url = "https://osf.io/preprints/socarxiv/eu5b4/"}]
 
 # Does the content use math formatting?
 math = true
